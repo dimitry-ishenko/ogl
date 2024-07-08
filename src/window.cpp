@@ -2,8 +2,6 @@
 #include <ogl/extern.hpp>
 #include <ogl/window.hpp>
 
-#include "common.ipp"
-
 namespace ogl
 {
 
@@ -38,7 +36,8 @@ void window::activate()
     if (!glewed_)
     {
         glewExperimental = GL_TRUE;
-        try_invoke(&glewInit);
+        int ev = glewInit();
+        if (ev) throw opengl_error{ev};
         glewed_ = true;
     }
 }

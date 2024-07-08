@@ -23,7 +23,6 @@ set(HEADERS
 set(MAIN_HEADER ogl.hpp)
 
 set(SOURCES
-    src/common.ipp
     src/core.cpp
     src/error.cpp
     src/window.cpp
