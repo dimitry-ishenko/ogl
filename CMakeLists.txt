@@ -14,6 +14,7 @@ find_package(OpenGL REQUIRED)
 set(HEADERS
     context.hpp
     error.hpp
+    types.hpp
     window.hpp
 )
 set(MAIN_HEADER ogl.hpp)
