@@ -66,6 +66,11 @@ void window::swap_buffers() const
     glfwSwapBuffers(win_.get());
 }
 
+ogl::key_state window::key_state(key k)
+{
+    return static_cast<ogl::key_state>(glfwGetKey(win_.get(), k));
+}
+
 void window::on_fb_size_changed(fb_size_changed cb)
 {
     if (cb)

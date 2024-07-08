@@ -1,6 +1,8 @@
 #ifndef OGL_WINDOW_HPP
 #define OGL_WINDOW_HPP
 
+#include <ogl/types.hpp>
+
 #include <functional>
 #include <memory>
 #include <optional>
@@ -38,6 +40,8 @@ public:
     void should_close(bool);
 
     void swap_buffers() const;
+
+    ogl::key_state key_state(key);
 
     using fb_size_changed = std::function<void(int width, int height)>;
     void on_fb_size_changed(fb_size_changed);
