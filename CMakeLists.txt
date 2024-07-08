@@ -12,17 +12,17 @@ find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(HEADERS
-    context.hpp
-    error.hpp
-    types.hpp
-    window.hpp
+    ogl/context.hpp
+    ogl/error.hpp
+    ogl/types.hpp
+    ogl/window.hpp
 )
 set(MAIN_HEADER ogl.hpp)
 
 set(SOURCES
-    context.cpp
-    error.cpp
-    window.cpp
+    src/context.cpp
+    src/error.cpp
+    src/window.cpp
 )
 
 add_library(ogl SHARED ${HEADERS} ${SOURCES})

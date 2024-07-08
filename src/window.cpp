@@ -1,5 +1,5 @@
-#include "error.hpp"
-#include "window.hpp"
+#include "ogl/error.hpp"
+#include "ogl/window.hpp"
 
 #include <functional> // std::invoke
 

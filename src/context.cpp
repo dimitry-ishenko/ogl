@@ -1,6 +1,6 @@
-#include "context.hpp"
-#include "error.hpp"
-#include "window.hpp"
+#include "ogl/context.hpp"
+#include "ogl/error.hpp"
+#include "ogl/window.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
