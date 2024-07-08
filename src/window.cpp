@@ -1,16 +1,34 @@
-#include "internal.hpp"
-#include "ogl/error.hpp"
-#include "ogl/window.hpp"
+#include <ogl/error.hpp>
+#include <ogl/extern.hpp>
+#include <ogl/window.hpp>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "common.ipp"
 
 namespace ogl
 {
 
-window::window(int width, int height, std::string_view title) :
-    win_{ glfwCreateWindow(width, height, title.data(), nullptr, nullptr), &glfwDestroyWindow }
+namespace
 {
+
+struct setup
+{
+    setup()
+    {
+        glfwSetErrorCallback([](int ev, const char*) { throw opengl_error{ev}; });
+        glfwInit();
+    }
+
+    ~setup() { glfwTerminate(); }
+};
+
+}
+
+window::window(int width, int height, std::string_view title) :
+    win_{ nullptr, &glfwDestroyWindow }
+{
+    static setup once;
+
+    win_.reset(glfwCreateWindow(width, height, title.data(), nullptr, nullptr));
     glfwSetWindowUserPointer(win_.get(), this);
 }
 

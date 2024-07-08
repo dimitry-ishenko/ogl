@@ -1,7 +1,5 @@
-#include "ogl/error.hpp"
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <ogl/error.hpp>
+#include <ogl/extern.hpp>
 
 namespace ogl
 {
@@ -18,7 +16,7 @@ public:
             return reinterpret_cast<const char*>(glewGetErrorString(ev));
 
         // GL errors
-        else if (ev >= GL_INVALID_ENUM && ev <= GL_CONTEXT_LOST) 
+        else if (ev >= GL_INVALID_ENUM && ev <= GL_CONTEXT_LOST)
             return reinterpret_cast<const char*>( glGetString(ev) );
 
         // GLFW errors

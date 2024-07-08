@@ -13,8 +13,9 @@ find_package(OpenGL REQUIRED)
 
 set(HEADERS
     ogl/color.hpp
-    ogl/context.hpp
+    ogl/core.hpp
     ogl/error.hpp
+    ogl/extern.hpp
     ogl/types.hpp
     ogl/vec.hpp
     ogl/window.hpp
@@ -22,9 +23,9 @@ set(HEADERS
 set(MAIN_HEADER ogl.hpp)
 
 set(SOURCES
-    src/context.cpp
+    src/common.ipp
+    src/core.cpp
     src/error.cpp
-    src/internal.hpp
     src/window.cpp
 )
 

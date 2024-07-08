@@ -5,7 +5,6 @@
 
 #include <functional>
 #include <memory>
-#include <optional>
 #include <string_view>
 
 struct GLFWwindow;
@@ -15,13 +14,12 @@ namespace ogl
 
 class window
 {
-    friend class context;
-    window(int width, int height, std::string_view title);
-
     std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*)> win_;
     bool glewed_ = false;
 
 public:
+    window(int width, int height, std::string_view title);
+
     void activate();
 
     bool should_close() const;

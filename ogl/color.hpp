@@ -21,10 +21,6 @@ struct color : Vector<float, 4>
     constexpr auto&& a() const { return e[3]; }
 };
 
-constexpr auto rgb(float r, float g, float b) { return color{r, g, b, 1}; }
-
 }
-
-using ogl::color, ogl::rgb;
 
 #endif

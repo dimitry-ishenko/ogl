@@ -9,9 +9,7 @@ namespace ogl
 
 enum errc
 {
-    no_error,
-
-    invalid_state,
+    invalid_state = 1,
     invalid_value,
     invalid_operation,
     out_of_memory,

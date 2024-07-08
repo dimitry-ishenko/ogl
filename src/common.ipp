@@ -1,8 +1,7 @@
-#ifndef OGL_INTERNAL_HPP
-#define OGL_INTERNAL_HPP
+#ifndef OGL_INTERNAL_IPP
+#define OGL_INTERNAL_IPP
 
 #include <ogl/error.hpp>
-
 #include <functional>
 
 namespace ogl
