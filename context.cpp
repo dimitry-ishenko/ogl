@@ -23,4 +23,8 @@ void context::viewport(int x, int y, int width, int height)
     glViewport(x, y, width, height);
 }
 
+void context::clear_color(color&& c) { glClearColor(c.r(), c.g(), c.b(), c.a()); }
+
+void context::clear() { glClear(GL_COLOR_BUFFER_BIT); }
+
 }
