@@ -15,12 +15,6 @@ namespace ogl
 
 class context;
 
-enum version
-{
-    ver3_0 = 0x000, ver3_1, ver3_2, ver3_3,
-    ver4_0 = 0x100, ver4_1, ver4_2, ver4_3, ver4_4, ver4_5, ver4_6,
-};
-
 struct window_hints
 {
     std::optional<version> ver;
