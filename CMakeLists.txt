@@ -12,9 +12,11 @@ find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(HEADERS
+    ogl/color.hpp
     ogl/context.hpp
     ogl/error.hpp
     ogl/types.hpp
+    ogl/vec.hpp
     ogl/window.hpp
 )
 set(MAIN_HEADER ogl.hpp)
