@@ -24,6 +24,7 @@ set(MAIN_HEADER ogl.hpp)
 set(SOURCES
     src/context.cpp
     src/error.cpp
+    src/internal.hpp
     src/window.cpp
 )
 

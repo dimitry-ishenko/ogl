@@ -1,25 +1,12 @@
+#include "internal.hpp"
 #include "ogl/error.hpp"
 #include "ogl/window.hpp"
-
-#include <functional> // std::invoke
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 namespace ogl
 {
-
-namespace
-{
-
-template<typename Fn, typename... Args>
-void try_invoke(Fn&& fn, Args... args)
-{
-    int ev = std::invoke(std::forward<Fn>(fn), std::forward<Args>(args)...);
-    if (ev) throw opengl_error{ev};
-}
-
-}
 
 window::window(int width, int height, std::string_view title) :
     win_{ glfwCreateWindow(width, height, title.data(), nullptr, nullptr), &glfwDestroyWindow }
