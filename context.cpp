@@ -1,5 +1,6 @@
 #include "context.hpp"
 #include "error.hpp"
+#include "window.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -14,6 +15,20 @@ context::context()
 }
 
 context::~context() { glfwTerminate(); }
+
+void context::window_hint(version ver)
+{
+    auto x = 3 + (ver >> 0x08), y = ver & 0xff;
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, x);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, y);
+}
+
+void context::reset_window_hints() { glfwDefaultWindowHints(); }
+
+window context::create_window(int width, int height, std::string_view title)
+{
+    return window{width, height, title};
+}
 
 void context::poll_events() { glfwPollEvents(); }
 void context::wait_events() { glfwWaitEvents(); }

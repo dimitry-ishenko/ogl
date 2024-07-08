@@ -12,19 +12,6 @@ namespace ogl
 namespace
 {
 
-inline auto create(int width, int height, std::string_view title, const window_hints& hints)
-{
-    if (hints.ver)
-    {
-        auto x = 3 + (*hints.ver >> 0x08), y = *hints.ver & 0xff;
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, x);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, y);
-    }
-
-    using p = std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*)>;
-    return p{ glfwCreateWindow(width, height, title.data(), nullptr, nullptr), &glfwDestroyWindow };
-}
-
 template<typename Fn, typename... Args>
 void try_invoke(Fn&& fn, Args... args)
 {
@@ -34,8 +21,8 @@ void try_invoke(Fn&& fn, Args... args)
 
 }
 
-window::window(context&, int width, int height, std::string_view title, const window_hints& hints) :
-    win_{ create(width, height, title, hints) }
+window::window(int width, int height, std::string_view title) :
+    win_{ glfwCreateWindow(width, height, title.data(), nullptr, nullptr), &glfwDestroyWindow }
 {
     glfwSetWindowUserPointer(win_.get(), this);
 }

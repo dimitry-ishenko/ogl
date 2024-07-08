@@ -13,21 +13,15 @@ struct GLFWwindow;
 namespace ogl
 {
 
-class context;
-
-struct window_hints
-{
-    std::optional<version> ver;
-};
-
 class window
 {
+    friend class context;
+    window(int width, int height, std::string_view title);
+
     std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*)> win_;
     bool glewed_ = false;
 
 public:
-    window(context&, int width, int height, std::string_view title, const window_hints& = { });
-
     void activate();
 
     bool should_close() const;
