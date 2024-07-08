@@ -27,7 +27,7 @@ public:
 
     void viewport(int x, int y, int width, int height);
 
-    void clear_color(color&&);
+    void clear_color(const color&);
     void clear();
 };
 
