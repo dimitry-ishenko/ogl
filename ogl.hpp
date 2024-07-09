@@ -1,3 +1,4 @@
+#include <ogl/buffer.hpp>
 #include <ogl/color.hpp>
 #include <ogl/core.hpp>
 #include <ogl/error.hpp>
