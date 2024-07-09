@@ -17,7 +17,7 @@ public:
 
         // GL errors
         else if (ev >= GL_INVALID_ENUM && ev <= GL_CONTEXT_LOST)
-            return reinterpret_cast<const char*>( glGetString(ev) );
+            return reinterpret_cast<const char*>(gluErrorString(ev));
 
         // GLFW errors
         else switch (ev)

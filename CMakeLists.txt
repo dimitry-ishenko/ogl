@@ -29,4 +29,4 @@ set(SOURCES
 )
 
 add_library(ogl SHARED ${HEADERS} ${SOURCES})
-target_link_libraries(ogl PUBLIC glfw OpenGL::GL GLEW::glew)
+target_link_libraries(ogl PUBLIC glfw GLEW::glew OpenGL::GL OpenGL::GLU)
