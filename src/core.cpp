@@ -1,4 +1,5 @@
 #include <ogl/core.hpp>
+#include <ogl/error.hpp>
 #include <ogl/extern.hpp>
 
 namespace ogl
@@ -16,7 +17,11 @@ void reset_window_hints() { glfwDefaultWindowHints(); }
 void poll_events() { glfwPollEvents(); }
 void wait_events() { glfwWaitEvents(); }
 
-void viewport(int x, int y, int width, int height) { glViewport(x, y, width, height); }
+void viewport(int x, int y, int width, int height)
+{
+    glViewport(x, y, width, height);
+    if (int ev = glGetError()) throw opengl_error{ev};
+}
 
 void clear(const color& c)
 {
