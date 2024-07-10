@@ -17,6 +17,7 @@ set(HEADERS
     ogl/core.hpp
     ogl/error.hpp
     ogl/extern.hpp
+    ogl/shader.hpp
     ogl/types.hpp
     ogl/vec.hpp
     ogl/window.hpp
@@ -27,6 +28,7 @@ set(SOURCES
     src/buffer.cpp
     src/core.cpp
     src/error.cpp
+    src/shader.cpp
     src/window.cpp
 )
 
