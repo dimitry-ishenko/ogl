@@ -13,6 +13,16 @@ vertex_buffer::vertex_buffer()
 
 vertex_buffer::~vertex_buffer() { glDeleteBuffers(1, &id_); }
 
+vertex_buffer::vertex_buffer(vertex_buffer&& rhs) : id_{rhs.id_} { rhs.id_ = 0; }
+
+vertex_buffer& vertex_buffer::operator=(vertex_buffer&& rhs)
+{
+    vertex_buffer::~vertex_buffer();
+    id_ = rhs.id_;
+    rhs.id_ = 0;
+    return (*this);
+}
+
 void vertex_buffer::data(void* payload, int size)
 {
     glBindBuffer(GL_ARRAY_BUFFER, id_);

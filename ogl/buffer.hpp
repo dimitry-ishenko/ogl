@@ -22,6 +22,12 @@ public:
     template<BufferData D>
     vertex_buffer(D&& payload) : vertex_buffer{ } { data(std::forward<D>(payload)); }
 
+    vertex_buffer(const vertex_buffer&) = delete;
+    vertex_buffer& operator=(const vertex_buffer&) = delete;
+
+    vertex_buffer(vertex_buffer&&);
+    vertex_buffer& operator=(vertex_buffer&&);
+
     template<BufferData D>
     void data(D&& payload)
     {
