@@ -7,6 +7,8 @@
 namespace ogl
 {
 
+constexpr int glsl_syntax_error = -1;
+
 enum errc
 {
     invalid_state = 1,
@@ -18,6 +20,7 @@ enum errc
     resource_unavailable,
     runtime_error,
     platform_error,
+    syntax_error,
 
     unknown_error = -1
 };
