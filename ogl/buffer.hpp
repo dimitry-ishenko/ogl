@@ -11,7 +11,7 @@ concept BufferData = std::ranges::contiguous_range<R> && std::ranges::sized_rang
 
 class vertex_buffer
 {
-    unsigned int id_;
+    unsigned id_;
 
     void data(void* payload, int size);
 
@@ -20,7 +20,7 @@ public:
     ~vertex_buffer();
 
     template<BufferData D>
-    vertex_buffer(D&& payload) : vertex_buffer{ } { data(std::forward<D>(payload)); }
+    explicit vertex_buffer(D&& payload) : vertex_buffer{ } { data(std::forward<D>(payload)); }
 
     vertex_buffer(const vertex_buffer&) = delete;
     vertex_buffer& operator=(const vertex_buffer&) = delete;
