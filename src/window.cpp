@@ -12,7 +12,7 @@ struct setup
 {
     setup()
     {
-        glfwSetErrorCallback([](int ev, const char*) { throw opengl_error{ev}; });
+        glfwSetErrorCallback([](int ev, const char*) { throw opengl_error(ev); });
         glfwInit();
     }
 
@@ -36,8 +36,7 @@ void window::activate()
     if (!glewed_)
     {
         glewExperimental = GL_TRUE;
-        int ev = glewInit();
-        if (ev) throw opengl_error{ev};
+        if (auto ev = glewInit()) throw opengl_error(ev);
         glewed_ = true;
     }
 }

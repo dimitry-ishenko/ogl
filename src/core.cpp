@@ -20,7 +20,7 @@ void wait_events() { glfwWaitEvents(); }
 void viewport(int x, int y, int width, int height)
 {
     glViewport(x, y, width, height);
-    if (int ev = glGetError()) throw opengl_error{ev};
+    if (auto ev = glGetError()) throw opengl_error(ev);
 }
 
 void clear(const color& c)
