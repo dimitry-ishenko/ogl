@@ -9,7 +9,8 @@ namespace ogl
 class shader
 {
 protected:
-    unsigned id_, type_;
+    unsigned shader_, type_;
+    friend class shader_program;
 
     explicit shader(unsigned type);
     ~shader();
@@ -36,6 +37,25 @@ class vertex_shader : public shader
 public:
     vertex_shader();
     explicit vertex_shader(std::string_view src) : vertex_shader{ } { compile(src); }
+};
+
+class shader_program
+{
+    unsigned pgm_;
+
+public:
+    shader_program();
+    ~shader_program();
+
+    shader_program(const shader_program&) = delete;
+    shader_program& operator=(const shader_program&) = delete;
+
+    shader_program(shader_program&&);
+    shader_program& operator=(shader_program&&);
+
+    void attach(const shader&);
+    void link();
+    void use();
 };
 
 }
