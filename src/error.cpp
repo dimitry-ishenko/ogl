@@ -14,6 +14,7 @@ public:
         switch (ev)
         {
         case glsl_syntax_error:             return "GLSL syntax error";
+        case glsl_link_error:               return "GLSL link error";
 
         case GLEW_ERROR_NO_GL_VERSION:
         case GLEW_ERROR_GL_VERSION_10_ONLY:
@@ -48,7 +49,8 @@ public:
     {
         switch (ev)
         {
-        case glsl_syntax_error:             return syntax_error;
+        case glsl_syntax_error:             return runtime_error;
+        case glsl_link_error:               return runtime_error;
 
         case GLEW_ERROR_NO_GL_VERSION:      return resource_unavailable;
         case GLEW_ERROR_GL_VERSION_10_ONLY: return resource_unavailable;
