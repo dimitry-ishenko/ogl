@@ -7,20 +7,20 @@ namespace ogl
 {
 
 template<typename R>
-concept BufferData = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
+concept VertexType = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
 
 class vertex_buffer
 {
-    unsigned id_;
+    unsigned vbo_;
 
-    void data(void* payload, int size);
+    void data(const void* payload, int size);
 
 public:
     vertex_buffer();
     ~vertex_buffer();
 
-    template<BufferData D>
-    explicit vertex_buffer(D&& payload) : vertex_buffer{ } { data(std::forward<D>(payload)); }
+    template<VertexType V>
+    explicit vertex_buffer(V&& payload) : vertex_buffer{ } { data(std::forward<V>(payload)); }
 
     vertex_buffer(const vertex_buffer&) = delete;
     vertex_buffer& operator=(const vertex_buffer&) = delete;
@@ -28,10 +28,10 @@ public:
     vertex_buffer(vertex_buffer&&);
     vertex_buffer& operator=(vertex_buffer&&);
 
-    template<BufferData D>
-    void data(D&& payload)
+    template<VertexType V>
+    void data(V&& payload)
     {
-        data(payload.data(), payload.size() * sizeof(typename D::value_type));
+        data(payload.data(), payload.size() * sizeof(typename V::value_type));
     }
 };
 
