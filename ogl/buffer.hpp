@@ -18,7 +18,7 @@ class vertex_buffer
 public:
     template<Payload P>
     explicit vertex_buffer(const P& payload) :
-        vertex_buffer( payload.data(), payload.size() * sizeof(decltype(payload[0])) )
+        vertex_buffer( std::data(payload), std::size(payload) * sizeof(decltype( *std::begin(payload) )) )
     { }
     ~vertex_buffer();
 
