@@ -9,35 +9,29 @@ namespace ogl
 class shader
 {
 protected:
-    unsigned shader_, type_;
+    unsigned shader_;
     friend class shader_program;
 
-    explicit shader(unsigned type);
+    shader(unsigned type, std::string_view src);
+
+public:
     ~shader();
 
     shader(const shader&) = delete;
     shader& operator=(const shader&) = delete;
 
-    shader(shader&&);
-    shader& operator=(shader&&);
-
-public:
-    void compile(std::string_view src);
+    shader(shader&& rhs) : shader_{rhs.shader_} { rhs.shader_ = 0; }
+    shader& operator=(shader&& rhs)
+    {
+        shader::~shader();
+        shader_ = rhs.shader_;
+        rhs.shader_ = 0;
+        return (*this);
+    }
 };
 
-class fragment_shader : public shader
-{
-public:
-    fragment_shader();
-    explicit fragment_shader(std::string_view src) : fragment_shader{ } { compile(src); }
-};
-
-class vertex_shader : public shader
-{
-public:
-    vertex_shader();
-    explicit vertex_shader(std::string_view src) : vertex_shader{ } { compile(src); }
-};
+class fragment_shader : public shader { public: explicit fragment_shader(std::string_view src); };
+class vertex_shader : public shader { public: explicit vertex_shader(std::string_view src); };
 
 class shader_program
 {

@@ -5,33 +5,11 @@
 namespace ogl
 {
 
-shader::shader(unsigned type) :
+shader::shader(unsigned type, std::string_view src) :
     shader_{ glCreateShader(type) }
 {
     if (!shader_) throw opengl_error(glGetError());
-}
 
-shader::~shader() { glDeleteShader(shader_); }
-
-shader::shader(shader&& rhs) :
-    shader_{rhs.shader_}, type_{rhs.type_}
-{
-    rhs.shader_ = 0;
-}
-
-shader& shader::operator=(shader&& rhs)
-{
-    shader::~shader();
-
-    shader_ = rhs.shader_;
-    type_ = rhs.type_;
-    rhs.shader_ = 0;
-    
-    return (*this);
-}
-
-void shader::compile(std::string_view src)
-{
     const char* data = src.data();
     int size = src.size();
 
@@ -50,8 +28,10 @@ void shader::compile(std::string_view src)
     }
 }
 
-fragment_shader::fragment_shader() : shader{GL_FRAGMENT_SHADER} { }
-vertex_shader::vertex_shader() : shader{GL_VERTEX_SHADER} { }
+shader::~shader() { glDeleteShader(shader_); }
+
+fragment_shader::fragment_shader(std::string_view src) : shader{GL_FRAGMENT_SHADER, src} { }
+vertex_shader::vertex_shader(std::string_view src) : shader{GL_VERTEX_SHADER, src} { }
 
 shader_program::shader_program() :
     pgm_{ glCreateProgram() }
