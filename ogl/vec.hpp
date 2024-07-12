@@ -15,6 +15,10 @@ struct Vector
     D e[N];
 };
 
+using vec2 = Vector<float, 2>;
+using vec3 = Vector<float, 3>;
+using vec4 = Vector<float, 4>;
+
 }
 
 #endif
