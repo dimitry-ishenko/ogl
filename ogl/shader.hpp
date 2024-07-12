@@ -1,6 +1,7 @@
 #ifndef OGL_SHADER_HPP
 #define OGL_SHADER_HPP
 
+#include <ranges>
 #include <string_view>
 
 namespace ogl
@@ -30,25 +31,42 @@ public:
     }
 };
 
-class fragment_shader : public shader { public: explicit fragment_shader(std::string_view src); };
-class vertex_shader : public shader { public: explicit vertex_shader(std::string_view src); };
+struct fragment_shader : shader { explicit fragment_shader(std::string_view src); };
+struct vertex_shader : shader { explicit vertex_shader(std::string_view src); };
+
+template<typename R>
+concept Shaders = std::ranges::range<R> && std::derived_from< std::ranges::range_value_t<R>, shader >;
 
 class shader_program
 {
     unsigned pgm_;
 
+    void create();
+    void attach(const shader&);
+    void link();
+
 public:
-    shader_program();
+    template<Shaders S>
+    shader_program(const S& ss)
+    {
+        create();
+        for(auto&& s : ss) attach(s);
+        link();
+    }
     ~shader_program();
 
     shader_program(const shader_program&) = delete;
     shader_program& operator=(const shader_program&) = delete;
 
-    shader_program(shader_program&&);
-    shader_program& operator=(shader_program&&);
+    shader_program(shader_program&& rhs) : pgm_{rhs.pgm_} { rhs.pgm_ = 0; }
+    shader_program& operator=(shader_program&& rhs)
+    {
+        shader_program::~shader_program();
+        pgm_ = rhs.pgm_;
+        rhs.pgm_ = 0;
+        return (*this);
+    }
 
-    void attach(const shader&);
-    void link();
     void use();
 };
 

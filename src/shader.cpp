@@ -33,29 +33,13 @@ shader::~shader() { glDeleteShader(shader_); }
 fragment_shader::fragment_shader(std::string_view src) : shader{GL_FRAGMENT_SHADER, src} { }
 vertex_shader::vertex_shader(std::string_view src) : shader{GL_VERTEX_SHADER, src} { }
 
-shader_program::shader_program() :
-    pgm_{ glCreateProgram() }
+void shader_program::create()
 {
+    pgm_ = glCreateProgram();
     if (!pgm_) throw opengl_error(glGetError());
 }
 
 shader_program::~shader_program() { glDeleteProgram(pgm_); }
-
-shader_program::shader_program(shader_program&& rhs) :
-    pgm_{rhs.pgm_}
-{
-    rhs.pgm_ = 0;
-}
-
-shader_program& shader_program::operator=(shader_program&& rhs)
-{
-    shader_program::~shader_program();
-
-    pgm_ = rhs.pgm_;
-    rhs.pgm_ = 0;
-
-    return (*this);
-}
 
 void shader_program::attach(const shader& s)
 {
