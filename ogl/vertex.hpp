@@ -15,6 +15,9 @@ class vertex_buffer
 
     vertex_buffer(const void* payload, int size);
 
+    void bind();
+    static void unbind();
+
 public:
     template<Payload P>
     explicit vertex_buffer(P&& payload) :
