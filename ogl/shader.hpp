@@ -41,15 +41,14 @@ class shader_program
 {
     unsigned pgm_;
 
-    void create();
+    shader_program();
     void attach(const shader&);
     void link();
 
 public:
     template<Shaders S>
-    shader_program(const S& ss)
+    shader_program(const S& ss) : shader_program{ }
     {
-        create();
         for(auto&& s : ss) attach(s);
         link();
     }
