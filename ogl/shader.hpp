@@ -47,9 +47,9 @@ class shader_program
 
 public:
     template<Shaders S>
-    shader_program(const S& ss) : shader_program{ }
+    shader_program(S&& shaders) : shader_program{ }
     {
-        for(auto&& s : ss) attach(s);
+        for(auto&& shader : shaders) attach(shader);
         link();
     }
     ~shader_program();
