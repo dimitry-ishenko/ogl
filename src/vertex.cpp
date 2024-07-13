@@ -1,4 +1,4 @@
-#include <ogl/buffer.hpp>
+#include <ogl/vertex.hpp>
 #include <ogl/error.hpp>
 #include <ogl/extern.hpp>
 

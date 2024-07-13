@@ -12,7 +12,6 @@ find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(HEADERS
-    ogl/buffer.hpp
     ogl/color.hpp
     ogl/core.hpp
     ogl/error.hpp
@@ -20,15 +19,16 @@ set(HEADERS
     ogl/shader.hpp
     ogl/types.hpp
     ogl/vec.hpp
+    ogl/vertex.hpp
     ogl/window.hpp
 )
 set(MAIN_HEADER ogl.hpp)
 
 set(SOURCES
-    src/buffer.cpp
     src/core.cpp
     src/error.cpp
     src/shader.cpp
+    src/vertex.cpp
     src/window.cpp
 )
 
