@@ -13,7 +13,7 @@ void reset_window_hints();
 void poll_events();
 void wait_events();
 
-void viewport(int x, int y, int width, int height);
+void viewport(int x, int y, unsigned width, unsigned height);
 
 void clear(const color&);
 

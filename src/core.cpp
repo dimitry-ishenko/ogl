@@ -17,7 +17,7 @@ void reset_window_hints() { glfwDefaultWindowHints(); }
 void poll_events() { glfwPollEvents(); }
 void wait_events() { glfwWaitEvents(); }
 
-void viewport(int x, int y, int width, int height)
+void viewport(int x, int y, unsigned width, unsigned height)
 {
     glViewport(x, y, width, height);
     if (auto ev = glGetError()) throw opengl_error(ev);
