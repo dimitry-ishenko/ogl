@@ -11,8 +11,11 @@ vertex_buffer::vertex_buffer(const void* payload, int size)
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+
     glBufferData(GL_ARRAY_BUFFER, size, payload, GL_STATIC_DRAW);
     if (auto ev = glGetError()) throw opengl_error(ev);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 vertex_buffer::~vertex_buffer() { glDeleteBuffers(1, &vbo_); }
