@@ -12,6 +12,22 @@ enum version
     ver4_0 = 0x100, ver4_1, ver4_2, ver4_3, ver4_4, ver4_5, ver4_6,
 };
 
+enum count { _1 = 1, _2, _3, _4, _bgra = GL_BGRA };
+
+enum type
+{
+    _byte             = GL_BYTE,
+    _ubyte            = GL_UNSIGNED_BYTE,
+    _short            = GL_SHORT,
+    _ushort           = GL_UNSIGNED_SHORT,
+    _int              = GL_INT,
+    _uint             = GL_UNSIGNED_INT,
+    _float            = GL_FLOAT,
+    _double           = GL_DOUBLE
+};
+
+enum norm { _norm = GL_TRUE, _dont_norm = GL_FALSE };
+
 enum key_state
 {
     released          = GLFW_RELEASE,
