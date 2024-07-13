@@ -18,7 +18,7 @@ class window
     bool glewed_ = false;
 
 public:
-    window(int width, int height, std::string_view title);
+    window(unsigned width, unsigned height, std::string_view title);
 
     void activate();
 

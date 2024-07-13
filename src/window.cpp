@@ -21,7 +21,7 @@ struct setup
 
 }
 
-window::window(int width, int height, std::string_view title) :
+window::window(unsigned width, unsigned height, std::string_view title) :
     win_{ nullptr, &glfwDestroyWindow }
 {
     static setup once;
