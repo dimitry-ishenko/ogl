@@ -17,7 +17,7 @@ class vertex_buffer
 {
     unsigned vbo_;
 
-    vertex_buffer(const void* payload, int size);
+    vertex_buffer(const void* payload, std::size_t size);
 
     void bind();
     static void unbind();

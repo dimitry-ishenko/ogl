@@ -5,7 +5,7 @@
 namespace ogl
 {
 
-vertex_buffer::vertex_buffer(const void* payload, int size)
+vertex_buffer::vertex_buffer(const void* payload, std::size_t size)
 {
     glGenBuffers(1, &vbo_);
     if (auto ev = glGetError()) throw opengl_error(ev);
