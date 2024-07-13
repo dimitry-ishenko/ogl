@@ -50,7 +50,7 @@ struct vertex_attr
     unsigned index;
     ogl::count count;
     ogl::type type;
-    ogl::norm norm;
+    ogl::norm norm = _dont_norm;
     int stride = 0;
     std::ptrdiff_t offset = 0;
 };
