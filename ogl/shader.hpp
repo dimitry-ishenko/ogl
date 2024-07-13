@@ -1,6 +1,7 @@
 #ifndef OGL_SHADER_HPP
 #define OGL_SHADER_HPP
 
+#include <initializer_list>
 #include <ranges>
 #include <string_view>
 
@@ -36,6 +37,8 @@ struct vertex_shader : shader { explicit vertex_shader(std::string_view src); };
 
 template<typename R>
 concept Shaders = std::ranges::range<R> && std::derived_from< std::ranges::range_value_t<R>, shader >;
+
+using shaders = std::initializer_list<shader>;
 
 class shader_program
 {
