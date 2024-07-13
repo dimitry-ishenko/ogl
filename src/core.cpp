@@ -29,7 +29,7 @@ void clear(const color& c)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_arrays(unsigned from, unsigned count)
+void draw_arrays(size_t from, size_t count)
 {
     glDrawArrays(GL_TRIANGLES, from, count);
     if (auto ev = glGetError()) throw opengl_error(ev);

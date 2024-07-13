@@ -17,7 +17,7 @@ void viewport(int x, int y, unsigned width, unsigned height);
 
 void clear(const color&);
 
-void draw_arrays(unsigned from, unsigned count);
+void draw_arrays(size_t from, size_t count);
 
 }
 

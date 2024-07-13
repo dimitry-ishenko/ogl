@@ -3,8 +3,12 @@
 
 #include <ogl/extern.hpp>
 
+#include <cstddef>
+
 namespace ogl
 {
+
+using std::size_t;
 
 enum version
 {
