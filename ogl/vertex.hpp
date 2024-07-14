@@ -20,6 +20,10 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
+class shader_program;
+class vertex_attr;
+void draw(shader_program&, vertex_attr&, std::size_t from);
+
 namespace internal
 {
 class vertex_buffer
@@ -40,7 +44,8 @@ protected:
     void bind();
     void unbind();
 
-    auto bytes() const { return bytes_; }
+    friend class ogl::vertex_attr;
+    friend void ogl::draw(shader_program&, vertex_attr&, std::size_t from);
 };
 }
 
@@ -87,6 +92,9 @@ class vertex_attr
     bool created_ = false;
     void enable();
     void disable();
+
+    friend void draw(shader_program&, vertex_attr&, std::size_t from);
+    friend void draw(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
 
 public:
     template<VertexBuffer B>

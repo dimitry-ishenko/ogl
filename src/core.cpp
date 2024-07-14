@@ -1,6 +1,8 @@
 #include <ogl/core.hpp>
 #include <ogl/error.hpp>
 #include <ogl/extern.hpp>
+#include <ogl/shader.hpp>
+#include <ogl/vertex.hpp>
 
 namespace ogl
 {
@@ -29,10 +31,17 @@ void clear(const color& c)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_arrays(std::size_t from, std::size_t count)
+void draw(shader_program& pgm, vertex_attr& attr, std::size_t from) { draw(pgm, attr, from, attr.buf_->bytes_ / attr.stride_); }
+
+void draw(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t size)
 {
-    glDrawArrays(GL_TRIANGLES, from, count);
+    pgm.use();
+    attr.enable();
+
+    glDrawArrays(GL_TRIANGLES, from, size);
     if (auto ev = glGetError()) throw opengl_error(ev);
+
+    attr.disable();
 }
 
 }

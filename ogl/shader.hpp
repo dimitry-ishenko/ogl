@@ -8,6 +8,7 @@
 #ifndef OGL_SHADER_HPP
 #define OGL_SHADER_HPP
 
+#include <cstddef>
 #include <initializer_list>
 #include <ranges>
 #include <string_view>
@@ -44,6 +45,8 @@ concept Shaders = std::ranges::range<R> && std::derived_from< std::ranges::range
 
 using shaders = std::initializer_list<shader>;
 
+class vertex_attr;
+
 class shader_program
 {
     unsigned pgm_;
@@ -51,6 +54,9 @@ class shader_program
     shader_program();
     void attach(const shader&);
     void link();
+    void use();
+
+    friend void draw(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
 
 public:
     template<Shaders S>
@@ -66,8 +72,6 @@ public:
 
     shader_program(shader_program&&);
     shader_program& operator=(shader_program&&);
-
-    void use();
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -17,7 +17,11 @@ void viewport(int x, int y, unsigned width, unsigned height);
 
 void clear(const color&);
 
-void draw_arrays(std::size_t from, std::size_t count);
+class shader_program;
+class vertex_attr;
+
+void draw(shader_program&, vertex_attr&, std::size_t from = 0);
+void draw(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
 
 }
 
