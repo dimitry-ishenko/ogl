@@ -8,7 +8,7 @@ namespace ogl
 namespace detail
 {
 
-vertex_buffer::vertex_buffer(const void* payload, size_t bytes) :
+vertex_buffer::vertex_buffer(const void* payload, std::size_t bytes) :
     bytes_{bytes}
 {
     glGenBuffers(1, &vbo_);

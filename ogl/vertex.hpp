@@ -16,9 +16,9 @@ class vertex_buffer
 {
 protected:
     unsigned vbo_;
-    size_t bytes_;
+    std::size_t bytes_;
 
-    vertex_buffer(const void* payload, size_t bytes);
+    vertex_buffer(const void* payload, std::size_t bytes);
     ~vertex_buffer();
 
     vertex_buffer(const vertex_buffer&) = delete;
