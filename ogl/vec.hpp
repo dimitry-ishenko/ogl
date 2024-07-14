@@ -1,7 +1,7 @@
 #ifndef OGL_VEC_HPP
 #define OGL_VEC_HPP
 
-#include <cstdint>
+#include <iterator>
 
 namespace ogl
 {
@@ -9,8 +9,26 @@ namespace ogl
 template<typename D, std::size_t N>
 struct Vector
 {
+    using value_type = D;
+    static constexpr auto size() { return N; }
+
     constexpr auto&& operator[](std::size_t n) { return e[n]; }
     constexpr auto&& operator[](std::size_t n) const { return e[n]; }
+
+    constexpr auto begin() { return std::begin(e); }
+    constexpr auto end() { return std::end(e); }
+
+    constexpr auto begin() const { return std::begin(e); }
+    constexpr auto end() const { return std::end(e); }
+
+    constexpr auto cbegin() const { return std::cbegin(e); }
+    constexpr auto cend() const { return std::cend(e); }
+
+    constexpr auto rbegin() { return std::rbegin(e); }
+    constexpr auto rend() { return std::rend(e); }
+
+    constexpr auto crbegin() const { return std::crbegin(e); }
+    constexpr auto crend() const { return std::crend(e); }
 
     D e[N];
 };
