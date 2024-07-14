@@ -17,9 +17,9 @@ namespace ogl
 namespace internal
 {
 
-vertex_buffer::vertex_buffer(const void* payload, std::size_t bytes) : bytes_{bytes}
+vertex_buffer::vertex_buffer(const void* payload, std::size_t bytes) : bytes{bytes}
 {
-    glGenBuffers(1, &vbo_);
+    glGenBuffers(1, &vbo);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     bind();
@@ -30,70 +30,69 @@ vertex_buffer::vertex_buffer(const void* payload, std::size_t bytes) : bytes_{by
     unbind();
 }
 
-vertex_buffer::~vertex_buffer() { glDeleteBuffers(1, &vbo_); }
+vertex_buffer::~vertex_buffer() { glDeleteBuffers(1, &vbo); }
 
-vertex_buffer::vertex_buffer(vertex_buffer&& rhs) : vbo_{rhs.vbo_} { rhs.vbo_ = 0; }
+vertex_buffer::vertex_buffer(vertex_buffer&& rhs) : vbo{rhs.vbo} { rhs.vbo = 0; }
 
 vertex_buffer& vertex_buffer::operator=(vertex_buffer&& rhs)
 {
     vertex_buffer::~vertex_buffer();
-    vbo_ = rhs.vbo_;
-    rhs.vbo_ = 0;
+    vbo = rhs.vbo;
+    rhs.vbo = 0;
     return (*this);
 }
 
-void vertex_buffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo_); }
+void vertex_buffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo); }
 void vertex_buffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 vertex_attr::vertex_attr(vertex_attr&& rhs) :
-    buf_{rhs.buf_}, index_{rhs.index_}, element_size_{rhs.element_size_}, element_type_{rhs.element_type_},
-    norm_{rhs.norm_}, stride_{rhs.stride_}, off_{rhs.off_}, created_{rhs.created_}
+    buf{rhs.buf}, index{rhs.index}, element_size{rhs.element_size}, element_type{rhs.element_type}, norm{rhs.norm}, stride{rhs.stride}, off{rhs.off}, created{rhs.created}
 {
-    rhs.buf_ = nullptr;
-    rhs.created_ = false;
+    rhs.buf = nullptr;
+    rhs.created = false;
 }
 
 vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
 {
     vertex_attr::~vertex_attr();
 
-    buf_ = rhs.buf_;
-    index_ = rhs.index_;
-    element_size_ = rhs.element_size_;
-    element_type_ = rhs.element_type_;
-    norm_ = rhs.norm_;
-    stride_ = rhs.stride_;
-    off_ = rhs.off_;
-    created_ = rhs.created_;
+    buf = rhs.buf;
+    index = rhs.index;
+    element_size = rhs.element_size;
+    element_type = rhs.element_type;
+    norm = rhs.norm;
+    stride = rhs.stride;
+    off = rhs.off;
+    created = rhs.created;
 
-    rhs.buf_ = nullptr;
-    rhs.created_ = false;
+    rhs.buf = nullptr;
+    rhs.created = false;
 
     return (*this);
 }
 
 void vertex_attr::create()
 {
-    buf_->bind();
+    buf->bind();
 
-    glVertexAttribPointer(index_, element_size_, element_type_, norm_, stride_, reinterpret_cast<const void*>(off_));
+    glVertexAttribPointer(index, element_size, element_type, norm, stride, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    buf_->unbind();
+    buf->unbind();
 }
 
 void vertex_attr::enable()
 {
-    if (!created_) { create(); created_ = true; }
-    glEnableVertexAttribArray(index_);
+    if (!created) { create(); created = true; }
+    glEnableVertexAttribArray(index);
 }
 
 void vertex_attr::disable()
 {
-    if (created_) glDisableVertexAttribArray(index_);
+    if (created) glDisableVertexAttribArray(index);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

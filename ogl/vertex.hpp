@@ -29,8 +29,8 @@ namespace internal
 class vertex_buffer
 {
 protected:
-    unsigned vbo_;
-    std::size_t bytes_;
+    unsigned vbo;
+    std::size_t bytes;
 
     vertex_buffer(const void* payload, std::size_t bytes);
     ~vertex_buffer();
@@ -78,18 +78,18 @@ concept VertexBuffer = std::same_as<B, vertex_buffer<typename B::value_type>>;
 
 class vertex_attr
 {
-    internal::vertex_buffer* buf_;
+    internal::vertex_buffer* buf;
 
-    unsigned index_;
-    std::size_t element_size_;
-    unsigned element_type_;
-    norm norm_;
-    std::size_t stride_;
-    std::ptrdiff_t off_;
+    unsigned index;
+    std::size_t element_size;
+    unsigned element_type;
+    ogl::norm norm;
+    std::size_t stride;
+    std::ptrdiff_t off;
 
     void create();
 
-    bool created_ = false;
+    bool created = false;
     void enable();
     void disable();
 
@@ -99,7 +99,7 @@ class vertex_attr
 public:
     template<VertexBuffer B>
     vertex_attr(B& buf, unsigned index, std::size_t element_size = B::element_size, std::ptrdiff_t off = 0, std::size_t stride = B::stride, ogl::norm norm = dont_norm) :
-        buf_{&buf}, index_{index}, element_size_{element_size}, element_type_{B::opengl_type}, norm_{norm}, stride_{stride}, off_{off}
+        buf{&buf}, index{index}, element_size{element_size}, element_type{B::opengl_type}, norm{norm}, stride{stride}, off{off}
     { }
     ~vertex_attr() { disable(); }
 

@@ -31,7 +31,7 @@ void clear(const color& c)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw(shader_program& pgm, vertex_attr& attr, std::size_t from) { draw(pgm, attr, from, attr.buf_->bytes_ / attr.stride_); }
+void draw(shader_program& pgm, vertex_attr& attr, std::size_t from) { draw(pgm, attr, from, attr.buf->bytes / attr.stride); }
 
 void draw(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t size)
 {
