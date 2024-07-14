@@ -30,6 +30,16 @@ shader::shader(unsigned type, std::string_view src) :
 
 shader::~shader() { glDeleteShader(shader_); }
 
+shader::shader(shader&& rhs) : shader_{rhs.shader_} { rhs.shader_ = 0; }
+
+shader& shader::operator=(shader&& rhs)
+{
+    shader::~shader();
+    shader_ = rhs.shader_;
+    rhs.shader_ = 0;
+    return (*this);
+}
+
 fragment_shader::fragment_shader(std::string_view src) : shader{GL_FRAGMENT_SHADER, src} { }
 vertex_shader::vertex_shader(std::string_view src) : shader{GL_VERTEX_SHADER, src} { }
 
@@ -40,6 +50,16 @@ shader_program::shader_program() :
 }
 
 shader_program::~shader_program() { glDeleteProgram(pgm_); }
+
+shader_program::shader_program(shader_program&& rhs) : pgm_{rhs.pgm_} { rhs.pgm_ = 0; }
+
+shader_program& shader_program::operator=(shader_program&& rhs)
+{
+    shader_program::~shader_program();
+    pgm_ = rhs.pgm_;
+    rhs.pgm_ = 0;
+    return (*this);
+}
 
 void shader_program::attach(const shader& s)
 {

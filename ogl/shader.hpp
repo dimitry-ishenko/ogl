@@ -22,14 +22,8 @@ public:
     shader(const shader&) = delete;
     shader& operator=(const shader&) = delete;
 
-    shader(shader&& rhs) : shader_{rhs.shader_} { rhs.shader_ = 0; }
-    shader& operator=(shader&& rhs)
-    {
-        shader::~shader();
-        shader_ = rhs.shader_;
-        rhs.shader_ = 0;
-        return (*this);
-    }
+    shader(shader&&);
+    shader& operator=(shader&&);
 };
 
 struct fragment_shader : shader { explicit fragment_shader(std::string_view src); };
@@ -60,14 +54,8 @@ public:
     shader_program(const shader_program&) = delete;
     shader_program& operator=(const shader_program&) = delete;
 
-    shader_program(shader_program&& rhs) : pgm_{rhs.pgm_} { rhs.pgm_ = 0; }
-    shader_program& operator=(shader_program&& rhs)
-    {
-        shader_program::~shader_program();
-        pgm_ = rhs.pgm_;
-        rhs.pgm_ = 0;
-        return (*this);
-    }
+    shader_program(shader_program&&);
+    shader_program& operator=(shader_program&&);
 
     void use();
 };
