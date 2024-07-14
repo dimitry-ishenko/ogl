@@ -2,6 +2,7 @@
 #include <ogl/core.hpp>
 #include <ogl/error.hpp>
 #include <ogl/shader.hpp>
+#include <ogl/traits.hpp>
 #include <ogl/types.hpp>
 #include <ogl/vec.hpp>
 #include <ogl/vertex.hpp>

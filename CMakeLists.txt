@@ -19,6 +19,7 @@ set(HEADERS
     ogl/error.hpp
     ogl/extern.hpp
     ogl/shader.hpp
+    ogl/traits.hpp
     ogl/types.hpp
     ogl/vec.hpp
     ogl/vertex.hpp

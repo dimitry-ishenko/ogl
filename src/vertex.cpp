@@ -14,11 +14,10 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace detail
+namespace internal
 {
 
-vertex_buffer::vertex_buffer(const void* payload, std::size_t bytes) :
-    bytes_{bytes}
+vertex_buffer::vertex_buffer(const void* payload, std::size_t bytes) : bytes_{bytes}
 {
     glGenBuffers(1, &vbo_);
     if (auto ev = glGetError()) throw opengl_error(ev);

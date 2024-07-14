@@ -8,6 +8,7 @@
 #ifndef OGL_BUFFER_HPP
 #define OGL_BUFFER_HPP
 
+#include <ogl/traits.hpp>
 #include <ogl/types.hpp>
 
 #include <cstddef>
@@ -19,7 +20,7 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace detail
+namespace internal
 {
 class vertex_buffer
 {
@@ -36,10 +37,10 @@ protected:
     vertex_buffer(vertex_buffer&&);
     vertex_buffer& operator=(vertex_buffer&&);
 
-    auto bytes() const { return bytes_; }
-
     void bind();
     void unbind();
+
+    auto bytes() const { return bytes_; }
 };
 }
 
@@ -48,17 +49,19 @@ template<typename R, typename V>
 concept Payload = std::ranges::contiguous_range<R> && std::ranges::sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
 
 template<typename V>
-class vertex_buffer : public detail::vertex_buffer
+class vertex_buffer : public internal::vertex_buffer
 {
 public:
-    using value_type = V;
+    using value_type = typename type_traits<V>::value_type;
+    static constexpr auto stride = type_traits<V>::stride;
+
+    using element_type = typename type_traits<V>::element_type;
+    static constexpr auto element_size = type_traits<V>::element_size;
+
+    static constexpr auto opengl_type = type_traits<V>::opengl_type;
 
     template<Payload<V> P>
-    explicit vertex_buffer(P&& payload) :
-        detail::vertex_buffer{ std::data(payload), std::size(payload) * sizeof(V) }
-    { }
-
-    auto size() const { return bytes() / sizeof(value_type); }
+    explicit vertex_buffer(P&& payload) : internal::vertex_buffer{ std::data(payload), std::size(payload) * stride } { }
 };
 
 template<typename R>
