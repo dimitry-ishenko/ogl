@@ -68,6 +68,41 @@ template<typename R>
 explicit vertex_buffer(R&&) -> vertex_buffer<std::ranges::range_value_t<R>>;
 
 ////////////////////////////////////////////////////////////////////////////////
+template<typename B>
+concept VertexBuffer = std::same_as<B, vertex_buffer<typename B::value_type>>;
+
+class vertex_attr
+{
+    internal::vertex_buffer* buf_;
+
+    unsigned index_;
+    std::size_t element_size_;
+    unsigned element_type_;
+    norm norm_;
+    std::size_t stride_;
+    std::ptrdiff_t off_;
+
+    void create();
+
+    bool created_ = false;
+    void enable();
+    void disable();
+
+public:
+    template<VertexBuffer B>
+    vertex_attr(B& buf, unsigned index, std::size_t element_size = B::element_size, std::ptrdiff_t off = 0, std::size_t stride = B::stride, ogl::norm norm = dont_norm) :
+        buf_{&buf}, index_{index}, element_size_{element_size}, element_type_{B::opengl_type}, norm_{norm}, stride_{stride}, off_{off}
+    { }
+    ~vertex_attr() { disable(); }
+
+    vertex_attr(const vertex_attr&) = delete;
+    vertex_attr& operator=(const vertex_attr&) = delete;
+
+    vertex_attr(vertex_attr&&);
+    vertex_attr& operator=(vertex_attr&&);
+};
+
+////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////

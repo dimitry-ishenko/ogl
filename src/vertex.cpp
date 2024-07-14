@@ -48,4 +48,53 @@ void vertex_buffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+vertex_attr::vertex_attr(vertex_attr&& rhs) :
+    buf_{rhs.buf_}, index_{rhs.index_}, element_size_{rhs.element_size_}, element_type_{rhs.element_type_},
+    norm_{rhs.norm_}, stride_{rhs.stride_}, off_{rhs.off_}, created_{rhs.created_}
+{
+    rhs.buf_ = nullptr;
+    rhs.created_ = false;
+}
+
+vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
+{
+    vertex_attr::~vertex_attr();
+
+    buf_ = rhs.buf_;
+    index_ = rhs.index_;
+    element_size_ = rhs.element_size_;
+    element_type_ = rhs.element_type_;
+    norm_ = rhs.norm_;
+    stride_ = rhs.stride_;
+    off_ = rhs.off_;
+    created_ = rhs.created_;
+
+    rhs.buf_ = nullptr;
+    rhs.created_ = false;
+
+    return (*this);
+}
+
+void vertex_attr::create()
+{
+    buf_->bind();
+
+    glVertexAttribPointer(index_, element_size_, element_type_, norm_, stride_, reinterpret_cast<const void*>(off_));
+    if (auto ev = glGetError()) throw opengl_error(ev);
+
+    buf_->unbind();
+}
+
+void vertex_attr::enable()
+{
+    if (!created_) { create(); created_ = true; }
+    glEnableVertexAttribArray(index_);
+}
+
+void vertex_attr::disable()
+{
+    if (created_) glDisableVertexAttribArray(index_);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 }

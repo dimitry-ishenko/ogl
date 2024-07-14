@@ -12,6 +12,8 @@ enum version
     ver4_0 = 0x100, ver4_1, ver4_2, ver4_3, ver4_4, ver4_5, ver4_6,
 };
 
+enum norm { dont_norm = GL_FALSE, normalize = GL_TRUE };
+
 enum key_state
 {
     released          = GLFW_RELEASE,
