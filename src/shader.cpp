@@ -1,10 +1,19 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2024 Dimitry Ishenko
+// Contact: dimitry (dot) ishenko (at) (gee) mail (dot) com
+//
+// Distributed under the GNU GPL license. See the LICENSE.md file for details.
+
+////////////////////////////////////////////////////////////////////////////////
 #include <ogl/error.hpp>
 #include <ogl/extern.hpp>
 #include <ogl/shader.hpp>
 
+////////////////////////////////////////////////////////////////////////////////
 namespace ogl
 {
 
+////////////////////////////////////////////////////////////////////////////////
 shader::shader(unsigned type, std::string_view src) :
     shader_{ glCreateShader(type) }
 {
@@ -43,6 +52,7 @@ shader& shader::operator=(shader&& rhs)
 fragment_shader::fragment_shader(std::string_view src) : shader{GL_FRAGMENT_SHADER, src} { }
 vertex_shader::vertex_shader(std::string_view src) : shader{GL_VERTEX_SHADER, src} { }
 
+////////////////////////////////////////////////////////////////////////////////
 shader_program::shader_program() :
     pgm_{ glCreateProgram() }
 {
@@ -90,4 +100,5 @@ void shader_program::use()
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 }
