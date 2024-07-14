@@ -21,7 +21,7 @@ namespace ogl
 class shader
 {
 protected:
-    unsigned shader_;
+    unsigned shad;
     friend class shader_program;
 
     shader(unsigned type, std::string_view src);
@@ -49,7 +49,7 @@ class vertex_attr;
 
 class shader_program
 {
-    unsigned pgm_;
+    unsigned pgm;
 
     shader_program();
     void attach(const shader&);
