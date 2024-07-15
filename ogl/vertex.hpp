@@ -20,41 +20,32 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-class shader_program;
-class vertex_attr;
-void draw(shader_program&, vertex_attr&, std::size_t from);
-
-namespace internal
-{
-class vertex_buffer
+class vertex_buffer_base
 {
 protected:
     unsigned vbo;
     std::size_t bytes;
 
-    vertex_buffer(const void* payload, std::size_t bytes);
-    ~vertex_buffer();
+    vertex_buffer_base(const void* payload, std::size_t bytes);
+    ~vertex_buffer_base();
 
-    vertex_buffer(const vertex_buffer&) = delete;
-    vertex_buffer& operator=(const vertex_buffer&) = delete;
+    vertex_buffer_base(const vertex_buffer_base&) = delete;
+    vertex_buffer_base& operator=(const vertex_buffer_base&) = delete;
 
-    vertex_buffer(vertex_buffer&&);
-    vertex_buffer& operator=(vertex_buffer&&);
+    vertex_buffer_base(vertex_buffer_base&&);
+    vertex_buffer_base& operator=(vertex_buffer_base&&);
 
     void bind();
     void unbind();
-
-    friend class ogl::vertex_attr;
-    friend void ogl::draw(shader_program&, vertex_attr&, std::size_t from);
+    friend class vertex_attr;
 };
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename R, typename V>
 concept Payload = std::ranges::contiguous_range<R> && std::ranges::sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
 
 template<typename V>
-class vertex_buffer : public internal::vertex_buffer
+class vertex_buffer : public vertex_buffer_base
 {
 public:
     using value_type = typename type_traits<V>::value_type;
@@ -66,7 +57,7 @@ public:
     static constexpr auto opengl_type = type_traits<V>::opengl_type;
 
     template<Payload<V> P>
-    explicit vertex_buffer(P&& payload) : internal::vertex_buffer{ std::data(payload), std::size(payload) * stride } { }
+    explicit vertex_buffer(P&& payload) : vertex_buffer_base{ std::data(payload), std::size(payload) * stride } { }
 };
 
 template<typename R>
@@ -76,31 +67,29 @@ explicit vertex_buffer(R&&) -> vertex_buffer<std::ranges::range_value_t<R>>;
 template<typename B>
 concept VertexBuffer = std::same_as<B, vertex_buffer<typename B::value_type>>;
 
+class shader_program;
+
 class vertex_attr
 {
-    internal::vertex_buffer* buf;
-
     unsigned index;
-    std::size_t element_size;
-    unsigned element_type;
-    ogl::norm norm;
-    std::size_t stride;
-    std::ptrdiff_t off;
+    std::size_t size;
 
-    void create();
+    vertex_attr(vertex_buffer_base&, unsigned index, std::size_t element_size, unsigned element_type, ogl::norm, std::size_t stride, std::ptrdiff_t off);
 
-    bool created = false;
-    void enable();
-    void disable();
+    void enable() const;
+    void disable() const;
 
-    friend void draw(shader_program&, vertex_attr&, std::size_t from);
-    friend void draw(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
+    friend class vertex_array;
+    friend void draw(shader_program&, vertex_attr&, std::size_t);
+    friend void draw(shader_program&, vertex_attr&, std::size_t, std::size_t);
 
 public:
     template<VertexBuffer B>
     vertex_attr(B& buf, unsigned index, std::size_t element_size = B::element_size, std::ptrdiff_t off = 0, std::size_t stride = B::stride, ogl::norm norm = dont_norm) :
-        buf{&buf}, index{index}, element_size{element_size}, element_type{B::opengl_type}, norm{norm}, stride{stride}, off{off}
-    { }
+        vertex_attr{ buf, index, element_size, B::opengl_type, norm, stride, off }
+    {
+        size = buf.bytes / (stride ? stride : (element_size * sizeof(typename B::element_type)));
+    }
     ~vertex_attr() { disable(); }
 
     vertex_attr(const vertex_attr&) = delete;
