@@ -20,7 +20,7 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-class vertex_buffer_base
+class vertex_buffer_base : protected movable
 {
 protected:
     unsigned vbo;
@@ -28,9 +28,6 @@ protected:
 
     vertex_buffer_base(const void* payload, std::size_t bytes);
     ~vertex_buffer_base();
-
-    vertex_buffer_base(const vertex_buffer_base&) = delete;
-    vertex_buffer_base& operator=(const vertex_buffer_base&) = delete;
 
     vertex_buffer_base(vertex_buffer_base&&);
     vertex_buffer_base& operator=(vertex_buffer_base&&);
@@ -69,7 +66,7 @@ concept VertexBuffer = std::same_as<B, vertex_buffer<typename B::value_type>>;
 
 class shader_program;
 
-class vertex_attr
+class vertex_attr : public movable
 {
     unsigned index;
     std::size_t size;
@@ -91,9 +88,6 @@ public:
         size = buf.bytes / (stride ? stride : (element_size * sizeof(typename B::element_type)));
     }
     ~vertex_attr() { disable(); }
-
-    vertex_attr(const vertex_attr&) = delete;
-    vertex_attr& operator=(const vertex_attr&) = delete;
 
     vertex_attr(vertex_attr&&);
     vertex_attr& operator=(vertex_attr&&);

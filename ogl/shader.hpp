@@ -8,6 +8,8 @@
 #ifndef OGL_SHADER_HPP
 #define OGL_SHADER_HPP
 
+#include <ogl/types.hpp> // movable
+
 #include <cstddef>
 #include <initializer_list>
 #include <ranges>
@@ -18,7 +20,7 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-class shader
+class shader : public movable
 {
 protected:
     unsigned shad;
@@ -28,9 +30,6 @@ protected:
 
 public:
     ~shader();
-
-    shader(const shader&) = delete;
-    shader& operator=(const shader&) = delete;
 
     shader(shader&&);
     shader& operator=(shader&&);
@@ -47,7 +46,7 @@ using shaders = std::initializer_list<shader>;
 
 class vertex_attr;
 
-class shader_program
+class shader_program : public movable
 {
     unsigned pgm;
 
@@ -66,9 +65,6 @@ public:
         link();
     }
     ~shader_program();
-
-    shader_program(const shader_program&) = delete;
-    shader_program& operator=(const shader_program&) = delete;
 
     shader_program(shader_program&&);
     shader_program& operator=(shader_program&&);

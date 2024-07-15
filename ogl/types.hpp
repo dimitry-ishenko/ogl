@@ -6,6 +6,17 @@
 namespace ogl
 {
 
+struct movable
+{
+    constexpr movable() = default;
+
+    constexpr movable(const movable&) = delete;
+    constexpr movable& operator=(const movable&) = delete;
+
+    constexpr movable(movable&&) = default;
+    constexpr movable& operator=(movable&&) = default;
+};
+
 enum version
 {
     ver3_0 = 0x000, ver3_1, ver3_2, ver3_3,
