@@ -45,12 +45,12 @@ void vertex_buffer_base::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 ////////////////////////////////////////////////////////////////////////////////
 namespace { static constexpr unsigned invalid_index = -1; }
 
-vertex_attr::vertex_attr(vertex_buffer_base& buf, unsigned index, std::size_t element_size, unsigned element_type, ogl::norm norm, std::size_t stride, std::ptrdiff_t off) :
+vertex_attr::vertex_attr(vertex_buffer_base& buf, unsigned index, std::size_t size, unsigned type, ogl::norm norm, std::size_t stride, std::ptrdiff_t off) :
     index{index}
 {
     buf.bind();
 
-    glVertexAttribPointer(index, element_size, element_type, norm, stride, reinterpret_cast<const void*>(off));
+    glVertexAttribPointer(index, size, type, norm, stride, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     buf.unbind();

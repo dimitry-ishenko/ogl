@@ -46,15 +46,15 @@ class vertex_buffer : public vertex_buffer_base
 {
 public:
     using value_type = typename type_traits<V>::value_type;
-    static constexpr auto stride = type_traits<V>::stride;
+    static constexpr auto value_size = type_traits<V>::value_size;
 
     using element_type = typename type_traits<V>::element_type;
-    static constexpr auto element_size = type_traits<V>::element_size;
+    static constexpr auto element_count = type_traits<V>::element_count;
 
     static constexpr auto opengl_type = type_traits<V>::opengl_type;
 
     template<Payload<V> P>
-    explicit vertex_buffer(P&& payload) : vertex_buffer_base{ std::data(payload), std::size(payload) * stride } { }
+    explicit vertex_buffer(P&& payload) : vertex_buffer_base{ std::data(payload), std::size(payload) * value_size } { }
 };
 
 template<typename R>
@@ -71,7 +71,7 @@ class vertex_attr : public movable
     unsigned index;
     std::size_t size;
 
-    vertex_attr(vertex_buffer_base&, unsigned index, std::size_t element_size, unsigned element_type, ogl::norm, std::size_t stride, std::ptrdiff_t off);
+    vertex_attr(vertex_buffer_base&, unsigned index, std::size_t size, unsigned type, ogl::norm, std::size_t stride, std::ptrdiff_t off);
 
     void enable() const;
     void disable() const;
@@ -82,10 +82,10 @@ class vertex_attr : public movable
 
 public:
     template<VertexBuffer B>
-    vertex_attr(B& buf, unsigned index, std::size_t element_size = B::element_size, std::ptrdiff_t off = 0, std::size_t stride = B::stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, element_size, B::opengl_type, norm, stride, off }
+    vertex_attr(B& buf, unsigned index, std::size_t element_count = B::element_count, std::ptrdiff_t off = 0, std::size_t stride = B::value_size, ogl::norm norm = dont_norm) :
+        vertex_attr{ buf, index, element_count, B::opengl_type, norm, stride, off }
     {
-        size = buf.bytes / (stride ? stride : (element_size * sizeof(typename B::element_type)));
+        size = buf.bytes / (stride ? stride : (element_count * sizeof(typename B::element_type)));
     }
     ~vertex_attr() { disable(); }
 
