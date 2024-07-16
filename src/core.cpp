@@ -1,12 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2024 Dimitry Ishenko
+// Contact: dimitry (dot) ishenko (at) (gee) mail (dot) com
+//
+// Distributed under the GNU GPL license. See the LICENSE.md file for details.
+
+////////////////////////////////////////////////////////////////////////////////
 #include <ogl/core.hpp>
 #include <ogl/error.hpp>
 #include <ogl/extern.hpp>
 #include <ogl/shader.hpp>
 #include <ogl/vertex.hpp>
 
+////////////////////////////////////////////////////////////////////////////////
 namespace ogl
 {
 
+////////////////////////////////////////////////////////////////////////////////
 void window_hint(version v)
 {
     auto x = 3 + (v >> 0x08), y = v & 0xff;
@@ -19,6 +28,7 @@ void reset_window_hints() { glfwDefaultWindowHints(); }
 void poll_events() { glfwPollEvents(); }
 void wait_events() { glfwWaitEvents(); }
 
+////////////////////////////////////////////////////////////////////////////////
 void viewport(int x, int y, unsigned width, unsigned height)
 {
     glViewport(x, y, width, height);
@@ -42,4 +52,5 @@ void draw_trias(shader_program& pgm, vertex_attr_ptr& ptr, std::size_t from, std
     vertex_attr_ptr::visitor::disable(ptr);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 }
