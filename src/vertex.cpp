@@ -69,11 +69,9 @@ vertex_attr::vertex_attr(vertex_attr&& rhs) : index_{rhs.index_}, size_{rhs.size
 vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
 {
     vertex_attr::~vertex_attr();
-
     index_ = rhs.index_;
     size_ = rhs.size_;
     rhs.index_ = no_index;
-    
     return (*this);
 }
 
