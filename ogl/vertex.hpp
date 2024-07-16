@@ -21,18 +21,6 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace detail
-{
-
-unsigned create(const void* payload, std::size_t bytes);
-void delete_(unsigned);
-
-void bind(unsigned);
-void unbind();
-
-}
-
-////////////////////////////////////////////////////////////////////////////////
 template<typename R, typename V>
 concept Payload = std::ranges::contiguous_range<R> && std::ranges::sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
 
@@ -54,28 +42,51 @@ public:
 
     static constexpr auto opengl_type = type_traits<V>::opengl_type;
 
-    template<Payload<V> R>
-    vertex_buffer(R&& payload) : vbo_{ detail::create(std::data(payload), std::size(payload) * value_size) }, size_{ std::size(payload) } { }
-    ~vertex_buffer() { detail::delete_(vbo_); }
+    template<Payload<V> R> vertex_buffer(R&& payload);
+    ~vertex_buffer();
 
-    vertex_buffer(vertex_buffer&& rhs) : vbo_{rhs.vbo_}, size_{rhs.size_} { rhs.vbo_ = 0; }
-
-    vertex_buffer& operator=(vertex_buffer&& rhs)
-    {
-        ~vertex_buffer();
-
-        vbo_ = rhs.vbo_;
-        size_ = rhs.size_;
-        rhs.vbo_ = 0;
-
-        return (*this);
-    }
+    vertex_buffer(vertex_buffer&&);
+    vertex_buffer& operator=(vertex_buffer&&);
 
     auto size() const { return size_; }
 };
 
 template<typename R>
 explicit vertex_buffer(R&&) -> vertex_buffer<std::ranges::range_value_t<R>>;
+
+////////////////////////////////////////////////////////////////////////////////
+namespace detail
+{
+
+unsigned create(const void* payload, std::size_t bytes);
+void delete_(unsigned);
+
+void bind(unsigned);
+void unbind();
+
+}
+
+template<typename V>
+template<Payload<V> R>
+vertex_buffer<V>::vertex_buffer(R&& payload) : vbo_{ detail::create(std::data(payload), std::size(payload) * value_size) }, size_{ std::size(payload) } { }
+
+template<typename V>
+vertex_buffer<V>::~vertex_buffer() { detail::delete_(vbo_); }
+
+template<typename V>
+vertex_buffer<V>::vertex_buffer(vertex_buffer<V>&& rhs) : vbo_{rhs.vbo_}, size_{rhs.size_} { rhs.vbo_ = 0; }
+
+template<typename V>
+vertex_buffer<V>& vertex_buffer<V>::operator=(vertex_buffer<V>&& rhs)
+{
+    ~vertex_buffer();
+
+    vbo_ = rhs.vbo_;
+    size_ = rhs.size_;
+    rhs.vbo_ = 0;
+
+    return (*this);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 class shader_program;
