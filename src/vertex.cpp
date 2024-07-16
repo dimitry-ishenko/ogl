@@ -43,39 +43,45 @@ void vertex_buffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo_); }
 void vertex_buffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 ////////////////////////////////////////////////////////////////////////////////
-std::size_t vertex_data::size() const
+namespace
 {
-    auto bytes = buf_->size() * buf_->value_size() - off_;
+
+static constexpr unsigned no_index = -1;
+
+constexpr auto calc_size(std::size_t vbo_size, std::size_t vbo_value_size, std::size_t elem_count, std::size_t off, std::size_t stride)
+{
+    auto bytes = vbo_size * vbo_value_size - off;
     // NB: stride_ can be 0 if data is packed
-    auto stride = stride_ ? stride_ : (element_count_ * buf_->value_size());
+    if (!stride) stride = elem_count * vbo_value_size;
 
     return bytes / stride + ((bytes % stride) ? 1 : 0);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-namespace { static constexpr unsigned no_index = -1; }
+}
 
-void vertex_attr::create()
+vertex_attr::vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm) :
+    index_{index}, size_{ calc_size(vbo.size(), vbo.value_size(), elem_count, off, stride) }
 {
-    vertex_buffer::visitor::bind(*buf_);
+    vertex_buffer::visitor::bind(vbo);
 
-    glVertexAttribPointer(index_, element_count_, element_type_, norm_, stride_, reinterpret_cast<const void*>(off_));
+    glVertexAttribPointer(index, elem_count, type, norm, stride, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    vertex_buffer::visitor::unbind(*buf_);
+    vertex_buffer::visitor::unbind(vbo);
 }
 
 vertex_attr::~vertex_attr() { if (index_ != no_index) disable(); }
 
-vertex_attr::vertex_attr(vertex_attr&& rhs) : vertex_data{std::move(rhs)} { rhs.index_ = no_index; }
+vertex_attr::vertex_attr(vertex_attr&& rhs) : index_{rhs.index_}, size_{rhs.size_} { rhs.index_ = no_index; }
 
 vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
 {
     vertex_attr::~vertex_attr();
 
-    vertex_data::operator=(std::move(rhs));
+    index_ = rhs.index_;
+    size_ = rhs.size_;
     rhs.index_ = no_index;
-
+    
     return (*this);
 }
 

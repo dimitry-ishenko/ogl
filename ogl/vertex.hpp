@@ -64,87 +64,48 @@ public:
     {
         static void bind(vertex_buffer& vbo) { vbo.bind(); }
         static void unbind(vertex_buffer& vbo) { vbo.unbind(); }
+
         friend class vertex_attr;
     };
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-class vertex_data
-{
-protected:
-    unsigned index_;
-    vertex_buffer* buf_;
-
-    std::size_t element_count_;
-    unsigned element_type_;
-    ogl::norm norm_;
-    std::size_t stride_;
-    std::size_t off_;
-
-public:
-    vertex_data(unsigned index, vertex_buffer& buf, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, buf.element_count(), buf.element_type(), 0, buf.value_size(), norm }
-    { }
-
-    vertex_data(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, size, buf.element_type(), off, buf.value_size(), norm }
-    { }
-
-    vertex_data(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, size, buf.element_type(), off, stride, norm }
-    { }
-
-    vertex_data(unsigned index, vertex_buffer& buf, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        index_{index}, buf_{&buf}, element_count_{size}, element_type_{type}, norm_{norm}, stride_{stride}, off_{off}
-    { }
-
-    auto index() const { return index_; }
-    auto element_count() const { return element_count_; }
-    auto element_type() const { return element_type_; }
-    auto norm() const { return norm_; }
-    auto stride() const { return stride_; }
-    auto off() const { return off_; }
-
-    std::size_t size() const;
-};
-
-////////////////////////////////////////////////////////////////////////////////
 class shader_program;
 
-class vertex_attr : public vertex_data
+class vertex_attr : public movable
 {
-    void create();
+    unsigned index_;
+    std::size_t size_;
 
     void enable();
     void disable();
 
 public:
-    vertex_attr(const vertex_data& data) : vertex_data{data} { create(); }
+    vertex_attr(unsigned index, vertex_buffer& vbo, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo, vbo.element_count(), vbo.element_type(), 0, vbo.value_size(), norm }
+    { }
+
+    vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo, size, vbo.element_type(), off, vbo.value_size(), norm }
+    { }
+
+    vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo, size, vbo.element_type(), off, stride, norm }
+    { }
+
+    vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm);
     ~vertex_attr();
-
-    vertex_attr(unsigned index, vertex_buffer& buf, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, norm }
-    { create(); }
-
-    vertex_attr(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, size, off, norm }
-    { create(); }
-
-    vertex_attr(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, size, off, stride, norm }
-    { create(); }
-
-    vertex_attr(unsigned index, vertex_buffer& buf, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_data{ index, buf, size, type, off, stride, norm }
-    { create(); }
 
     vertex_attr(vertex_attr&&);
     vertex_attr& operator=(vertex_attr&&);
+
+    auto size() const { return size_; }
 
     class visitor
     {
         static void enable(vertex_attr& attr) { attr.enable(); }
         static void disable(vertex_attr& attr) { attr.disable(); }
+
         friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
     };
 };
