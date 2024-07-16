@@ -107,30 +107,11 @@ class vertex_attr : public movable
     friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
 
 public:
-    template<typename V>
-    vertex_attr(unsigned index, vertex_buffer<V>& vbo, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, 0, vbo.elem_count, vbo.value_size, vbo.opengl_type, norm }
-    { }
-
-    template<typename V>
-    vertex_attr(unsigned index, vertex_buffer<V>& vbo, packed_t, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, 0, vbo.elem_count, 0, vbo.opengl_type, norm }
-    { }
-
-    template<typename V>
-    vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, elem_from, elem_count, vbo.value_size, vbo.opengl_type, norm }
-    { }
-
-    template<typename V>
-    vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, elem_from, elem_count, 0, vbo.opengl_type, norm }
-    { }
-
-    template<typename V>
-    vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, elem_from, elem_count, stride, vbo.opengl_type, norm }
-    { }
+    template<typename V> vertex_attr(unsigned index, vertex_buffer<V>&, ogl::norm = dont_norm);
+    template<typename V> vertex_attr(unsigned index, vertex_buffer<V>&, packed_t, ogl::norm = dont_norm);
+    template<typename V> vertex_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, ogl::norm = dont_norm);
+    template<typename V> vertex_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm = dont_norm);
+    template<typename V> vertex_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm = dont_norm);
     ~vertex_attr();
 
     vertex_attr(vertex_attr&&);
@@ -138,6 +119,33 @@ public:
 
     auto size() const { return size_; }
 };
+
+////////////////////////////////////////////////////////////////////////////////
+
+template<typename V>
+vertex_attr::vertex_attr(unsigned index, vertex_buffer<V>& vbo, ogl::norm norm) :
+    vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, 0, vbo.elem_count, vbo.value_size, vbo.opengl_type, norm }
+{ }
+
+template<typename V>
+vertex_attr::vertex_attr(unsigned index, vertex_buffer<V>& vbo, packed_t, ogl::norm norm) :
+    vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, 0, vbo.elem_count, 0, vbo.opengl_type, norm }
+{ }
+
+template<typename V>
+vertex_attr::vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, ogl::norm norm) :
+    vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, elem_from, elem_count, vbo.value_size, vbo.opengl_type, norm }
+{ }
+
+template<typename V>
+vertex_attr::vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm norm) :
+    vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, elem_from, elem_count, 0, vbo.opengl_type, norm }
+{ }
+
+template<typename V>
+vertex_attr::vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm) :
+    vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, vbo.elem_size, elem_from, elem_count, stride, vbo.opengl_type, norm }
+{ }
 
 ////////////////////////////////////////////////////////////////////////////////
 class vertex_array : public movable
