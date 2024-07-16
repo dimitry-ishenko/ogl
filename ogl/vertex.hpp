@@ -33,14 +33,14 @@ class vertex_buffer : public movable
     friend class vertex_attr;
 
 public:
-    using value_type = typename type_traits<V>::value_type;
-    static constexpr auto value_size = type_traits<V>::value_size;
+    using value_type = type_traits<V>::value_type;
+    using elem_type  = type_traits<V>::elem_type;
 
-    using elem_type = typename type_traits<V>::elem_type;
-    static constexpr auto elem_size = type_traits<V>::elem_size;
+    static constexpr auto value_size = type_traits<V>::value_size;
+    static constexpr auto elem_size  = type_traits<V>::elem_size;
     static constexpr auto elem_count = type_traits<V>::elem_count;
 
-    static constexpr auto opengl_type = type_traits<V>::opengl_type;
+    static constexpr auto opengl_type= type_traits<V>::opengl_type;
 
     template<Payload<V> R> vertex_buffer(R&& payload);
     ~vertex_buffer();
