@@ -70,7 +70,7 @@ public:
     class visitor
     {
         static void use(shader_program& p) { p.use(); }
-        friend void draw_trias(shader_program&, vertex_attr_ptr&, std::size_t from, std::size_t size);
+        friend void draw_trias(shader_program&, vertex_attr_ptr&, std::size_t from, std::size_t count);
     };
 };
 

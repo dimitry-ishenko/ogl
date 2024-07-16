@@ -62,8 +62,8 @@ public:
 
     class visitor
     {
-        static void bind(vertex_buffer& b) { b.bind(); }
-        static void unbind(vertex_buffer& b) { b.unbind(); }
+        static void bind(vertex_buffer& v) { v.bind(); }
+        static void unbind(vertex_buffer& v) { v.unbind(); }
         friend class vertex_attr_ptr;
     };
 };
@@ -143,8 +143,8 @@ public:
 
     class visitor
     {
-        static void enable(vertex_attr_ptr& p) { p.enable(); }
-        static void disable(vertex_attr_ptr& p) { p.disable(); }
+        static void enable(vertex_attr_ptr& v) { v.enable(); }
+        static void disable(vertex_attr_ptr& v) { v.disable(); }
         friend void draw_trias(shader_program&, vertex_attr_ptr&, std::size_t, std::size_t);
     };
 };

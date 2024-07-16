@@ -41,12 +41,12 @@ void clear(const color& c)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_trias(shader_program& pgm, vertex_attr_ptr& ptr, std::size_t from, std::size_t size)
+void draw_trias(shader_program& pgm, vertex_attr_ptr& ptr, std::size_t from, std::size_t count)
 {
     shader_program::visitor::use(pgm);
     vertex_attr_ptr::visitor::enable(ptr);
 
-    glDrawArrays(GL_TRIANGLES, from, size);
+    glDrawArrays(GL_TRIANGLES, from, count);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     vertex_attr_ptr::visitor::disable(ptr);
