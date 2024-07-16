@@ -19,21 +19,21 @@ namespace ogl
 namespace detail
 {
 
-unsigned create(const void* payload, std::size_t bytes);
-void delete_(unsigned);
+unsigned vbo_create(const void* payload, std::size_t bytes);
+void vbo_delete(unsigned);
 
-void bind(unsigned);
-void unbind();
+void vbo_bind(unsigned);
+void vbo_unbind();
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
 template<Payload<V> R>
-vertex_buffer<V>::vertex_buffer(R&& payload) : vbo_{ detail::create(std::data(payload), std::size(payload) * value_size) }, size_{ std::size(payload) } { }
+vertex_buffer<V>::vertex_buffer(R&& payload) : vbo_{ detail::vbo_create(std::data(payload), std::size(payload) * value_size) }, size_{ std::size(payload) } { }
 
 template<typename V>
-vertex_buffer<V>::~vertex_buffer() { detail::delete_(vbo_); }
+vertex_buffer<V>::~vertex_buffer() { detail::vbo_delete(vbo_); }
 
 template<typename V>
 vertex_buffer<V>::vertex_buffer(vertex_buffer<V>&& rhs) : vbo_{rhs.vbo_}, size_{rhs.size_} { rhs.vbo_ = 0; }

@@ -17,26 +17,34 @@ namespace ogl
 namespace detail
 {
 
-unsigned create(const void* payload, std::size_t bytes)
+unsigned xbo_create()
 {
-    unsigned vbo;
-    glGenBuffers(1, &vbo);
+    unsigned xbo;
+    glGenBuffers(1, &xbo);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    bind(vbo);
+    return xbo;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+unsigned vbo_create(const void* payload, std::size_t bytes)
+{
+    unsigned vbo = xbo_create();
+
+    vbo_bind(vbo);
 
     glBufferData(GL_ARRAY_BUFFER, bytes, payload, GL_STATIC_DRAW);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    unbind();
+    vbo_unbind();
 
     return vbo;
 }
 
-void delete_(unsigned vbo) { glDeleteBuffers(1, &vbo); }
+void vbo_delete(unsigned vbo) { glDeleteBuffers(1, &vbo); }
 
-void bind(unsigned vbo) { glBindBuffer(GL_ARRAY_BUFFER, vbo); }
-void unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+void vbo_bind(unsigned vbo) { glBindBuffer(GL_ARRAY_BUFFER, vbo); }
+void vbo_unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 }
 
@@ -54,12 +62,12 @@ vertex_attr::vertex_attr(unsigned index, unsigned vbo, std::size_t vbo_size, std
     size_ = bytes / stride + ((bytes % stride) ? 1 : 0);
 
     ////////////////////
-    detail::bind(vbo);
+    detail::vbo_bind(vbo);
 
     glVertexAttribPointer(index, elem_count, type, norm, stride, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    detail::unbind();
+    detail::vbo_unbind();
 }
 
 vertex_attr::~vertex_attr() { if (index_ != no_index) disable(); }
