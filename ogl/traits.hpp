@@ -44,9 +44,9 @@ struct type_traits
     using value_type = std::remove_cv_t<T>;
     static constexpr std::size_t value_size = sizeof(value_type);
 
-    using element_type = value_type;
-    static constexpr std::size_t element_size = sizeof(element_type);
-    static constexpr std::size_t element_count = 1;
+    using elem_type = value_type;
+    static constexpr std::size_t elem_size = sizeof(elem_type);
+    static constexpr std::size_t elem_count = 1;
 
     static constexpr auto opengl_type = detail::opengl_type<value_type>();
 };
@@ -58,11 +58,11 @@ struct type_traits<Vector<D, N>>
     using value_type = Vector<D, N>;
     static constexpr std::size_t value_size = sizeof(value_type);
 
-    using element_type = typename value_type::value_type;
-    static constexpr std::size_t element_size = sizeof(element_type);
-    static constexpr std::size_t element_count = value_type::size();
+    using elem_type = typename value_type::value_type;
+    static constexpr std::size_t elem_size = sizeof(elem_type);
+    static constexpr std::size_t elem_count = value_type::size();
 
-    static constexpr auto opengl_type = type_traits<element_type>::opengl_type;
+    static constexpr auto opengl_type = type_traits<elem_type>::opengl_type;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

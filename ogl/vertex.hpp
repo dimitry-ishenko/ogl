@@ -34,9 +34,9 @@ class vertex_buffer : public movable
     std::size_t size_; // # of values
     std::size_t value_size_;
 
-    std::size_t element_count_; // # of elements in value
-    unsigned element_type_;
-    std::size_t element_size_;
+    std::size_t elem_count_; // # of elements in value
+    unsigned elem_type_;
+    std::size_t elem_size_;
 
     void bind();
     void unbind();
@@ -44,7 +44,7 @@ class vertex_buffer : public movable
 public:
     template<Payload R>
     vertex_buffer(R&& payload) : size_{ std::size(payload) }, value_size_{ traits<R>::value_size },
-        element_count_{ traits<R>::element_count }, element_type_{ traits<R>::opengl_type }, element_size_{ traits<R>::element_size }
+        elem_count_{ traits<R>::elem_count }, elem_type_{ traits<R>::opengl_type }, elem_size_{ traits<R>::elem_size }
     {
         create(std::data(payload), size_ * value_size_);
     }
@@ -56,9 +56,9 @@ public:
     auto size() const { return size_; }
     auto value_size() const { return value_size_; }
 
-    auto element_count() const { return element_count_; }
-    auto element_type() const { return element_type_; }
-    auto element_size() const { return element_size_; }
+    auto elem_count() const { return elem_count_; }
+    auto elem_type() const { return elem_type_; }
+    auto elem_size() const { return elem_size_; }
 
     class visitor
     {
@@ -82,15 +82,15 @@ class vertex_attr : public movable
 
 public:
     vertex_attr(unsigned index, vertex_buffer& vbo, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo, vbo.element_count(), vbo.element_type(), 0, vbo.value_size(), norm }
+        vertex_attr{ index, vbo, vbo.elem_count(), vbo.elem_type(), 0, vbo.value_size(), norm }
     { }
 
     vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo, size, vbo.element_type(), off, vbo.value_size(), norm }
+        vertex_attr{ index, vbo, size, vbo.elem_type(), off, vbo.value_size(), norm }
     { }
 
     vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo, size, vbo.element_type(), off, stride, norm }
+        vertex_attr{ index, vbo, size, vbo.elem_type(), off, stride, norm }
     { }
 
     vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm);
