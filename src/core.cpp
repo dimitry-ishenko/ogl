@@ -33,7 +33,7 @@ void clear(const color& c)
 
 void draw_trias(shader_program& pgm, vertex_attr_ptr& ptr, std::size_t from, std::size_t size)
 {
-    pgm.use();
+    shader_program::visitor::use(pgm);
     vertex_attr_ptr::visitor::enable(ptr);
 
     glDrawArrays(GL_TRIANGLES, from, size);
