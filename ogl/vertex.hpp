@@ -72,9 +72,9 @@ public:
 class vertex_attr
 {
 protected:
+    unsigned index_;
     vertex_buffer* buf_;
 
-    unsigned index_;
     std::size_t element_count_;
     unsigned element_type_;
     ogl::norm norm_;
@@ -82,20 +82,20 @@ protected:
     std::size_t off_;
 
 public:
-    vertex_attr(vertex_buffer& buf, unsigned index, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, buf.element_count(), buf.element_type(), 0, buf.value_size(), norm }
+    vertex_attr(unsigned index, vertex_buffer& buf, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, buf.element_count(), buf.element_type(), 0, buf.value_size(), norm }
     { }
 
-    vertex_attr(vertex_buffer& buf, unsigned index, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, size, buf.element_type(), off, buf.value_size(), norm }
+    vertex_attr(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, size, buf.element_type(), off, buf.value_size(), norm }
     { }
 
-    vertex_attr(vertex_buffer& buf, unsigned index, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, size, buf.element_type(), off, stride, norm }
+    vertex_attr(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, size, buf.element_type(), off, stride, norm }
     { }
 
-    vertex_attr(vertex_buffer& buf, unsigned index, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        buf_{&buf}, index_{index}, element_count_{size}, element_type_{type}, norm_{norm}, stride_{stride}, off_{off}
+    vertex_attr(unsigned index, vertex_buffer& buf, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        index_{index}, buf_{&buf}, element_count_{size}, element_type_{type}, norm_{norm}, stride_{stride}, off_{off}
     { }
 
     auto index() const { return index_; }
@@ -122,20 +122,20 @@ public:
     vertex_attr_ptr(const vertex_attr& attr) : vertex_attr{attr} { create(); }
     ~vertex_attr_ptr();
 
-    vertex_attr_ptr(vertex_buffer& buf, unsigned index, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, norm }
+    vertex_attr_ptr(unsigned index, vertex_buffer& buf, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, norm }
     { create(); }
 
-    vertex_attr_ptr(vertex_buffer& buf, unsigned index, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, size, off, norm }
+    vertex_attr_ptr(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, size, off, norm }
     { create(); }
 
-    vertex_attr_ptr(vertex_buffer& buf, unsigned index, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, size, off, stride, norm }
+    vertex_attr_ptr(unsigned index, vertex_buffer& buf, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, size, off, stride, norm }
     { create(); }
 
-    vertex_attr_ptr(vertex_buffer& buf, unsigned index, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ buf, index, size, type, off, stride, norm }
+    vertex_attr_ptr(unsigned index, vertex_buffer& buf, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, buf, size, type, off, stride, norm }
     { create(); }
 
     vertex_attr_ptr(vertex_attr_ptr&&);
