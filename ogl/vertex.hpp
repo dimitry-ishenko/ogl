@@ -82,7 +82,7 @@ protected:
     std::size_t off_;
 
 public:
-    explicit vertex_attr(vertex_buffer& buf, unsigned index, ogl::norm norm = dont_norm) :
+    vertex_attr(vertex_buffer& buf, unsigned index, ogl::norm norm = dont_norm) :
         vertex_attr{ buf, index, buf.element_count(), buf.element_type(), 0, buf.value_size(), norm }
     { }
 
@@ -119,10 +119,10 @@ class vertex_attr_ptr : public vertex_attr
     void disable();
 
 public:
-    explicit vertex_attr_ptr(const vertex_attr& attr) : vertex_attr{attr} { create(); }
+    vertex_attr_ptr(const vertex_attr& attr) : vertex_attr{attr} { create(); }
     ~vertex_attr_ptr();
 
-    explicit vertex_attr_ptr(vertex_buffer& buf, unsigned index, ogl::norm norm = dont_norm) :
+    vertex_attr_ptr(vertex_buffer& buf, unsigned index, ogl::norm norm = dont_norm) :
         vertex_attr{ buf, index, norm }
     { create(); }
 
