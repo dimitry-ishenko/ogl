@@ -55,7 +55,7 @@ class shader_program : public movable
     void link();
     void use();
 
-    friend void draw(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
+    friend void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
 
 public:
     template<Shaders S>

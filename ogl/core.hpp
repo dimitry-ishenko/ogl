@@ -20,8 +20,7 @@ void clear(const color&);
 class shader_program;
 class vertex_attr;
 
-void draw(shader_program&, vertex_attr&, std::size_t from = 0);
-void draw(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
+void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
 
 }
 

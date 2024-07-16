@@ -69,7 +69,6 @@ class shader_program;
 class vertex_attr : public movable
 {
     unsigned index;
-    std::size_t size;
 
     vertex_attr(vertex_buffer_base&, unsigned index, std::size_t size, unsigned type, ogl::norm, std::size_t stride, std::ptrdiff_t off);
 
@@ -77,16 +76,13 @@ class vertex_attr : public movable
     void disable() const;
 
     friend class vertex_array;
-    friend void draw(shader_program&, vertex_attr&, std::size_t);
-    friend void draw(shader_program&, vertex_attr&, std::size_t, std::size_t);
+    friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
 
 public:
     template<VertexBuffer B>
     vertex_attr(B& buf, unsigned index, std::size_t element_count = B::element_count, std::ptrdiff_t off = 0, std::size_t stride = B::value_size, ogl::norm norm = dont_norm) :
         vertex_attr{ buf, index, element_count, B::opengl_type, norm, stride, off }
-    {
-        size = buf.bytes / (stride ? stride : (element_count * sizeof(typename B::element_type)));
-    }
+    { }
     ~vertex_attr() { disable(); }
 
     vertex_attr(vertex_attr&&);
