@@ -20,54 +20,60 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-template<typename R>
-concept Payload = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
+namespace detail
+{
 
+unsigned create(const void* payload, std::size_t bytes);
+void delete_(unsigned);
+
+void bind(unsigned);
+void unbind();
+
+}
+
+////////////////////////////////////////////////////////////////////////////////
+template<typename R, typename V>
+concept Payload = std::ranges::contiguous_range<R> && std::ranges::sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
+
+template<typename V>
 class vertex_buffer : public movable
 {
     unsigned vbo_;
-    void create(const void* payload, std::size_t bytes);
+    std::size_t size_;
 
-    template<typename R>
-    using traits = type_traits< std::ranges::range_value_t<R> >;
-
-    std::size_t size_; // # of values
-    std::size_t value_size_;
-
-    std::size_t elem_count_; // # of elements in value
-    unsigned elem_type_;
-    std::size_t elem_size_;
-
-    void bind();
-    void unbind();
+    friend class vertex_attr;
 
 public:
-    template<Payload R>
-    vertex_buffer(R&& payload) : size_{ std::size(payload) }, value_size_{ traits<R>::value_size },
-        elem_count_{ traits<R>::elem_count }, elem_type_{ traits<R>::opengl_type }, elem_size_{ traits<R>::elem_size }
-    {
-        create(std::data(payload), size_ * value_size_);
-    }
-    ~vertex_buffer();
+    using value_type = typename type_traits<V>::value_type;
+    static constexpr auto value_size = type_traits<V>::value_size;
+ 
+    using elem_type = typename type_traits<V>::elem_type;
+    static constexpr auto elem_count = type_traits<V>::elem_count;
 
-    vertex_buffer(vertex_buffer&&);
-    vertex_buffer& operator=(vertex_buffer&&);
+    static constexpr auto opengl_type = type_traits<V>::opengl_type;
+
+    template<Payload<V> R>
+    vertex_buffer(R&& payload) : vbo_{ detail::create(std::data(payload), std::size(payload) * value_size) }, size_{ std::size(payload) } { }
+    ~vertex_buffer() { detail::delete_(vbo_); }
+
+    vertex_buffer(vertex_buffer&& rhs) : vbo_{rhs.vbo_}, size_{rhs.size_} { rhs.vbo_ = 0; }
+
+    vertex_buffer& operator=(vertex_buffer&& rhs)
+    {
+        ~vertex_buffer();
+
+        vbo_ = rhs.vbo_;
+        size_ = rhs.size_;
+        rhs.vbo_ = 0;
+
+        return (*this);
+    }
 
     auto size() const { return size_; }
-    auto value_size() const { return value_size_; }
-
-    auto elem_count() const { return elem_count_; }
-    auto elem_type() const { return elem_type_; }
-    auto elem_size() const { return elem_size_; }
-
-    class visitor
-    {
-        static void bind(vertex_buffer& vbo) { vbo.bind(); }
-        static void unbind(vertex_buffer& vbo) { vbo.unbind(); }
-
-        friend class vertex_attr;
-    };
 };
+
+template<typename R>
+explicit vertex_buffer(R&&) -> vertex_buffer<std::ranges::range_value_t<R>>;
 
 ////////////////////////////////////////////////////////////////////////////////
 class shader_program;
@@ -77,37 +83,41 @@ class vertex_attr : public movable
     unsigned index_;
     std::size_t size_;
 
+    vertex_attr(unsigned index, unsigned vbo, std::size_t vbo_size, std::size_t vbo_value_size,
+        std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm
+    );
+
     void enable();
     void disable();
 
+    friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
+
 public:
-    vertex_attr(unsigned index, vertex_buffer& vbo, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo, vbo.elem_count(), vbo.elem_type(), 0, vbo.value_size(), norm }
+    template<typename V>
+    vertex_attr(unsigned index, vertex_buffer<V>& vbo, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo, vbo.elem_count, vbo.opengl_type, 0, vbo.value_size, norm }
     { }
 
-    vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, std::size_t off = 0, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo, size, vbo.elem_type(), off, vbo.value_size(), norm }
+    template<typename V>
+    vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_count, std::size_t off = 0, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo, elem_count, vbo.opengl_type, off, vbo.value_size, norm }
     { }
 
-    vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
-        vertex_attr{ index, vbo, size, vbo.elem_type(), off, stride, norm }
+    template<typename V>
+    vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_count, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo, elem_count, vbo.opengl_type, off, stride, norm }
     { }
 
-    vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t size, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm);
+    template<typename V>
+    vertex_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm) :
+        vertex_attr{ index, vbo.vbo_, vbo.size(), vbo.value_size, elem_count, type, off, stride, norm }
+    { }
     ~vertex_attr();
 
     vertex_attr(vertex_attr&&);
     vertex_attr& operator=(vertex_attr&&);
 
     auto size() const { return size_; }
-
-    class visitor
-    {
-        static void enable(vertex_attr& attr) { attr.enable(); }
-        static void disable(vertex_attr& attr) { attr.disable(); }
-
-        friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
-    };
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -55,6 +55,8 @@ class shader_program : public movable
     void link();
     void use();
 
+    friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
+
 public:
     template<Shaders S>
     shader_program(S&& shaders) : shader_program{ }
@@ -66,12 +68,6 @@ public:
 
     shader_program(shader_program&&);
     shader_program& operator=(shader_program&&);
-
-    class visitor
-    {
-        static void use(shader_program& p) { p.use(); }
-        friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
-    };
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -14,60 +14,50 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-void vertex_buffer::create(const void* payload, std::size_t bytes)
+namespace detail
 {
-    glGenBuffers(1, &vbo_);
+
+unsigned create(const void* payload, std::size_t bytes)
+{
+    unsigned vbo;
+    glGenBuffers(1, &vbo);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    bind();
+    bind(vbo);
 
     glBufferData(GL_ARRAY_BUFFER, bytes, payload, GL_STATIC_DRAW);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     unbind();
+
+    return vbo;
 }
 
-vertex_buffer::~vertex_buffer() { glDeleteBuffers(1, &vbo_); }
+void delete_(unsigned vbo) { glDeleteBuffers(1, &vbo); }
 
-vertex_buffer::vertex_buffer(vertex_buffer&& rhs) : vbo_{rhs.vbo_} { rhs.vbo_ = 0; }
+void bind(unsigned vbo) { glBindBuffer(GL_ARRAY_BUFFER, vbo); }
+void unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
-vertex_buffer& vertex_buffer::operator=(vertex_buffer&& rhs)
-{
-    vertex_buffer::~vertex_buffer();
-    vbo_ = rhs.vbo_;
-    rhs.vbo_ = 0;
-    return (*this);
 }
-
-void vertex_buffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo_); }
-void vertex_buffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace
-{
+namespace { static constexpr unsigned no_index = -1; }
 
-static constexpr unsigned no_index = -1;
-
-constexpr auto calc_size(std::size_t vbo_size, std::size_t vbo_value_size, std::size_t elem_count, std::size_t off, std::size_t stride)
+vertex_attr::vertex_attr(unsigned index, unsigned vbo, std::size_t vbo_size, std::size_t vbo_value_size,
+    std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm) : index_{index}
 {
     auto bytes = vbo_size * vbo_value_size - off;
-    // NB: stride_ can be 0 if data is packed
-    if (!stride) stride = elem_count * vbo_value_size;
+    if (!stride) stride = elem_count * vbo_value_size; // stride can be 0 to indicate packed data
 
-    return bytes / stride + ((bytes % stride) ? 1 : 0);
-}
+    size_ = bytes / stride + ((bytes % stride) ? 1 : 0);
 
-}
-
-vertex_attr::vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm) :
-    index_{index}, size_{ calc_size(vbo.size(), vbo.value_size(), elem_count, off, stride) }
-{
-    vertex_buffer::visitor::bind(vbo);
+    ////////////////////
+    detail::bind(vbo);
 
     glVertexAttribPointer(index, elem_count, type, norm, stride, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    vertex_buffer::visitor::unbind(vbo);
+    detail::unbind();
 }
 
 vertex_attr::~vertex_attr() { if (index_ != no_index) disable(); }
