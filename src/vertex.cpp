@@ -43,9 +43,11 @@ void unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 ////////////////////////////////////////////////////////////////////////////////
 namespace { static constexpr unsigned no_index = -1; }
 
-vertex_attr::vertex_attr(unsigned index, unsigned vbo, std::size_t vbo_size, std::size_t vbo_value_size,
-    std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm) : index_{index}
+vertex_attr::vertex_attr(unsigned index, unsigned vbo, std::size_t vbo_size, std::size_t vbo_value_size, std::size_t vbo_elem_size,
+    std::size_t elem_from, std::size_t elem_count, std::size_t stride, unsigned type, ogl::norm norm) : index_{index}
 {
+    auto off = elem_from * vbo_elem_size;
+
     auto bytes = vbo_size * vbo_value_size - off;
     if (!stride) stride = elem_count * vbo_value_size; // stride can be 0 to indicate packed data
 
