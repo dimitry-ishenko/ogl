@@ -31,15 +31,15 @@ void clear(const color& c)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t size)
+void draw_trias(shader_program& pgm, vertex_attr_ptr& ptr, std::size_t from, std::size_t size)
 {
     pgm.use();
-    attr.enable();
+    vertex_attr_ptr::visitor::enable(ptr);
 
     glDrawArrays(GL_TRIANGLES, from, size);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
-    attr.disable();
+    vertex_attr_ptr::visitor::disable(ptr);
 }
 
 }

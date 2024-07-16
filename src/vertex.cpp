@@ -14,9 +14,9 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-vertex_buffer_base::vertex_buffer_base(const void* payload, std::size_t bytes) : bytes{bytes}
+void vertex_buffer::create(const void* payload, std::size_t bytes)
 {
-    glGenBuffers(1, &vbo);
+    glGenBuffers(1, &vbo_);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     bind();
@@ -27,49 +27,60 @@ vertex_buffer_base::vertex_buffer_base(const void* payload, std::size_t bytes) :
     unbind();
 }
 
-vertex_buffer_base::~vertex_buffer_base() { glDeleteBuffers(1, &vbo); }
+vertex_buffer::~vertex_buffer() { glDeleteBuffers(1, &vbo_); }
 
-vertex_buffer_base::vertex_buffer_base(vertex_buffer_base&& rhs) : vbo{rhs.vbo} { rhs.vbo = 0; }
+vertex_buffer::vertex_buffer(vertex_buffer&& rhs) : vbo_{rhs.vbo_} { rhs.vbo_ = 0; }
 
-vertex_buffer_base& vertex_buffer_base::operator=(vertex_buffer_base&& rhs)
+vertex_buffer& vertex_buffer::operator=(vertex_buffer&& rhs)
 {
-    vertex_buffer_base::~vertex_buffer_base();
-    vbo = rhs.vbo;
-    rhs.vbo = 0;
+    vertex_buffer::~vertex_buffer();
+    vbo_ = rhs.vbo_;
+    rhs.vbo_ = 0;
     return (*this);
 }
 
-void vertex_buffer_base::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo); }
-void vertex_buffer_base::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
+void vertex_buffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo_); }
+void vertex_buffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace { static constexpr unsigned invalid_index = -1; }
-
-vertex_attr::vertex_attr(vertex_buffer_base& buf, unsigned index, std::size_t size, unsigned type, ogl::norm norm, std::size_t stride, std::ptrdiff_t off) :
-    index{index}
+std::size_t vertex_attr::size() const
 {
-    buf.bind();
+    auto bytes = buf_->size() * buf_->value_size() - off_;
+    // NB: stride_ can be 0 if data is packed
+    auto stride = stride_ ? stride_ : (element_count_ * buf_->value_size());
 
-    glVertexAttribPointer(index, size, type, norm, stride, reinterpret_cast<const void*>(off));
-    if (auto ev = glGetError()) throw opengl_error(ev);
-
-    buf.unbind();
+    return bytes / stride + ((bytes % stride) ? 1 : 0);
 }
 
-vertex_attr::vertex_attr(vertex_attr&& rhs) : index{rhs.index} { rhs.index = invalid_index; }
+////////////////////////////////////////////////////////////////////////////////
+namespace { static constexpr unsigned no_index = -1; }
 
-vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
+void vertex_attr_ptr::create()
 {
-    vertex_attr::~vertex_attr();
+    vertex_buffer::visitor::bind(*buf_);
 
-    index = rhs.index;
-    rhs.index = invalid_index;
+    glVertexAttribPointer(index_, element_count_, element_type_, norm_, stride_, reinterpret_cast<const void*>(off_));
+    if (auto ev = glGetError()) throw opengl_error(ev);
+
+    vertex_buffer::visitor::unbind(*buf_);
+}
+
+vertex_attr_ptr::~vertex_attr_ptr() { if (index_ != no_index) disable(); }
+
+vertex_attr_ptr::vertex_attr_ptr(vertex_attr_ptr&& rhs) : vertex_attr{std::move(rhs)} { rhs.index_ = no_index; }
+
+vertex_attr_ptr& vertex_attr_ptr::operator=(vertex_attr_ptr&& rhs)
+{
+    vertex_attr_ptr::~vertex_attr_ptr();
+
+    vertex_attr::operator=(std::move(rhs));
+    rhs.index_ = no_index;
 
     return (*this);
 }
 
-void vertex_attr::enable() const { if (index != invalid_index) glEnableVertexAttribArray(index); }
-void vertex_attr::disable() const { if (index != invalid_index) glDisableVertexAttribArray(index); }
+void vertex_attr_ptr::enable() { glEnableVertexAttribArray(index_); }
+void vertex_attr_ptr::disable() { glDisableVertexAttribArray(index_); }
 
 ////////////////////////////////////////////////////////////////////////////////
 }

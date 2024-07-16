@@ -18,9 +18,9 @@ void viewport(int x, int y, unsigned width, unsigned height);
 void clear(const color&);
 
 class shader_program;
-class vertex_attr;
+class vertex_attr_ptr;
 
-void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
+void draw_trias(shader_program&, vertex_attr_ptr&, std::size_t from, std::size_t count);
 
 }
 

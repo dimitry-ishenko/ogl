@@ -44,7 +44,7 @@ concept Shaders = std::ranges::range<R> && std::derived_from< std::ranges::range
 
 using shaders = std::initializer_list<shader>;
 
-class vertex_attr;
+class vertex_attr_ptr;
 
 class shader_program : public movable
 {
@@ -55,7 +55,7 @@ class shader_program : public movable
     void link();
     void use();
 
-    friend void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t size);
+    friend void draw_trias(shader_program&, vertex_attr_ptr&, std::size_t from, std::size_t size);
 
 public:
     template<Shaders S>
