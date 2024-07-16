@@ -43,7 +43,7 @@ void vertex_buffer::bind() { glBindBuffer(GL_ARRAY_BUFFER, vbo_); }
 void vertex_buffer::unbind() { glBindBuffer(GL_ARRAY_BUFFER, 0); }
 
 ////////////////////////////////////////////////////////////////////////////////
-std::size_t vertex_attr::size() const
+std::size_t vertex_data::size() const
 {
     auto bytes = buf_->size() * buf_->value_size() - off_;
     // NB: stride_ can be 0 if data is packed
@@ -55,7 +55,7 @@ std::size_t vertex_attr::size() const
 ////////////////////////////////////////////////////////////////////////////////
 namespace { static constexpr unsigned no_index = -1; }
 
-void vertex_attr_ptr::create()
+void vertex_attr::create()
 {
     vertex_buffer::visitor::bind(*buf_);
 
@@ -65,22 +65,22 @@ void vertex_attr_ptr::create()
     vertex_buffer::visitor::unbind(*buf_);
 }
 
-vertex_attr_ptr::~vertex_attr_ptr() { if (index_ != no_index) disable(); }
+vertex_attr::~vertex_attr() { if (index_ != no_index) disable(); }
 
-vertex_attr_ptr::vertex_attr_ptr(vertex_attr_ptr&& rhs) : vertex_attr{std::move(rhs)} { rhs.index_ = no_index; }
+vertex_attr::vertex_attr(vertex_attr&& rhs) : vertex_data{std::move(rhs)} { rhs.index_ = no_index; }
 
-vertex_attr_ptr& vertex_attr_ptr::operator=(vertex_attr_ptr&& rhs)
+vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
 {
-    vertex_attr_ptr::~vertex_attr_ptr();
+    vertex_attr::~vertex_attr();
 
-    vertex_attr::operator=(std::move(rhs));
+    vertex_data::operator=(std::move(rhs));
     rhs.index_ = no_index;
 
     return (*this);
 }
 
-void vertex_attr_ptr::enable() { glEnableVertexAttribArray(index_); }
-void vertex_attr_ptr::disable() { glDisableVertexAttribArray(index_); }
+void vertex_attr::enable() { glEnableVertexAttribArray(index_); }
+void vertex_attr::disable() { glDisableVertexAttribArray(index_); }
 
 ////////////////////////////////////////////////////////////////////////////////
 }
