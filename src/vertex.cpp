@@ -79,4 +79,26 @@ void vertex_attr::enable() { glEnableVertexAttribArray(index_); }
 void vertex_attr::disable() { glDisableVertexAttribArray(index_); }
 
 ////////////////////////////////////////////////////////////////////////////////
+vertex_array::vertex_array()
+{
+    glGenVertexArrays(1, &vao_);
+    if (auto ev = glGetError()) throw opengl_error(ev);
+}
+
+vertex_array::~vertex_array() { glDeleteVertexArrays(1, &vao_); }
+
+vertex_array::vertex_array(vertex_array&& rhs) : vao_{rhs.vao_} { rhs.vao_ = 0; }
+
+vertex_array& vertex_array::operator=(vertex_array&& rhs)
+{
+    vertex_array::~vertex_array();
+    vao_ = rhs.vao_;
+    rhs.vao_ = 0;
+    return (*this);
+}
+
+void vertex_array::bind() { glBindVertexArray(vao_); }
+void vertex_array::unbind() { glBindVertexArray(0); }
+
+////////////////////////////////////////////////////////////////////////////////
 }

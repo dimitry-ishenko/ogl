@@ -14,6 +14,7 @@
 #include <cstddef>
 #include <initializer_list>
 #include <ranges>
+#include <utility>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace ogl
@@ -90,6 +91,7 @@ class vertex_attr : public movable
     void enable();
     void disable();
 
+    friend class vertex_array;
     friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
 
 public:
@@ -118,6 +120,49 @@ public:
     vertex_attr& operator=(vertex_attr&&);
 
     auto size() const { return size_; }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class vertex_array : public movable
+{
+    unsigned vao_;
+
+    void bind();
+    void unbind();
+
+    friend void draw_trias(shader_program&, vertex_array&, std::size_t, std::size_t);
+
+    template<typename... Args>
+    void enable(Args&&... args)
+    {
+        bind();
+        ogl::vertex_attr attr{ std::forward<Args>(args)... };
+        attr.enable();
+        unbind();
+    }
+
+public:
+    vertex_array();
+    ~vertex_array();
+
+    vertex_array(vertex_array&&);
+    vertex_array& operator=(vertex_array&&);
+
+    template<typename V>
+    void vertex_attr(unsigned index, vertex_buffer<V>& vbo, ogl::norm norm = dont_norm)
+    { enable(index, vbo, norm); }
+
+    template<typename V>
+    void enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_count, std::size_t off = 0, ogl::norm norm = dont_norm)
+    { enable(index, vbo, elem_count, off, norm); }
+
+    template<typename V>
+    void enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_count, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm)
+    { enable(index, vbo, elem_count, off, stride, norm); }
+
+    template<typename V>
+    void enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_count, unsigned type, std::size_t off, std::size_t stride, ogl::norm norm = dont_norm)
+    { enable(index, vbo, elem_count, type, off, stride, norm); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

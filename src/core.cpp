@@ -53,4 +53,16 @@ void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::s
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::size_t count)
+{
+    pgm.use();
+    vao.bind();
+
+    glDrawArrays(GL_TRIANGLES, from, count);
+    if (auto ev = glGetError()) throw opengl_error(ev);
+
+    vao.unbind();
+}
+
+////////////////////////////////////////////////////////////////////////////////
 }
