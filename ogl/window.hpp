@@ -12,6 +12,7 @@
 
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string_view>
 
 struct GLFWwindow;
@@ -21,13 +22,19 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
+struct window_hints
+{
+    std::optional<version> ver;
+};
+
+////////////////////////////////////////////////////////////////////////////////
 class window
 {
     std::unique_ptr<GLFWwindow, void (*)(GLFWwindow*)> win_;
     bool glewed_ = false;
 
 public:
-    window(unsigned width, unsigned height, std::string_view title);
+    window(unsigned width, unsigned height, std::string_view title, const window_hints& = { });
 
     void activate();
 

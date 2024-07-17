@@ -16,9 +16,6 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-void window_hint(version);
-void reset_window_hints();
-
 void poll_events();
 void wait_events();
 

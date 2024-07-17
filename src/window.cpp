@@ -28,14 +28,27 @@ struct setup
     ~setup() { glfwTerminate(); }
 };
 
+void set_hints(const window_hints& hints)
+{
+    glfwDefaultWindowHints();
+
+    if (hints.ver)
+    {
+        auto x = 3 + (*hints.ver >> 0x08), y = *hints.ver & 0xff;
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, x);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, y);
+    }
+}
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-window::window(unsigned width, unsigned height, std::string_view title) :
+window::window(unsigned width, unsigned height, std::string_view title, const window_hints& hints) :
     win_{ nullptr, &glfwDestroyWindow }
 {
     static setup once;
 
+    set_hints(hints);
     win_.reset(glfwCreateWindow(width, height, title.data(), nullptr, nullptr));
     glfwSetWindowUserPointer(win_.get(), this);
 }
