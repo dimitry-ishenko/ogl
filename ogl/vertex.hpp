@@ -96,6 +96,8 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+class vertex_array;
+
 class element_buffer : public movable
 {
     unsigned ebo_;
@@ -109,7 +111,9 @@ class element_buffer : public movable
     void bind();
     void unbind();
 
+    friend class vertex_array;
     friend void draw_trias(shader_program&, vertex_attr&, element_buffer&, std::size_t, std::size_t);
+    friend void draw_trias(shader_program&, vertex_array&, std::size_t, std::size_t);
 
 public:
     element_buffer();
@@ -138,6 +142,7 @@ void element_buffer::data(R&& payload)
 class vertex_array : public movable
 {
     unsigned vao_;
+    ogl::element_buffer* ebo_ = nullptr;
 
     void bind();
     void unbind();
@@ -158,6 +163,8 @@ public:
     void vertex_attr(unsigned index, vertex_buffer&, std::size_t elem_from, std::size_t elem_count, ogl::norm = dont_norm);
     void vertex_attr(unsigned index, vertex_buffer&, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm = dont_norm);
     void vertex_attr(unsigned index, vertex_buffer&, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm = dont_norm);
+
+    void element_buffer(ogl::element_buffer&);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

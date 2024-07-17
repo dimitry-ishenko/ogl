@@ -71,8 +71,16 @@ void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::s
     pgm.use();
     vao.bind();
 
-    glDrawArrays(GL_TRIANGLES, from, count);
-    if (auto ev = glGetError()) throw opengl_error(ev);
+    if (vao.ebo_)
+    {
+        glDrawElements(GL_TRIANGLES, count, vao.ebo_->opengl_type_, reinterpret_cast<const void*>(from * vao.ebo_->value_size_));
+        if (auto ev = glGetError()) throw opengl_error(ev);
+    }
+    else
+    {
+        glDrawArrays(GL_TRIANGLES, from, count);
+        if (auto ev = glGetError()) throw opengl_error(ev);
+    }
 
     vao.unbind();
 }

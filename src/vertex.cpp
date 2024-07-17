@@ -182,12 +182,13 @@ vertex_array::vertex_array()
 
 vertex_array::~vertex_array() { glDeleteVertexArrays(1, &vao_); }
 
-vertex_array::vertex_array(vertex_array&& rhs) : vao_{rhs.vao_} { rhs.vao_ = 0; }
+vertex_array::vertex_array(vertex_array&& rhs) : vao_{rhs.vao_}, ebo_{rhs.ebo_} { rhs.vao_ = 0; }
 
 vertex_array& vertex_array::operator=(vertex_array&& rhs)
 {
     vertex_array::~vertex_array();
     vao_ = rhs.vao_;
+    ebo_ = rhs.ebo_;
     rhs.vao_ = 0;
     return (*this);
 }
@@ -223,6 +224,14 @@ void vertex_array::vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t e
 void vertex_array::vertex_attr(unsigned index, vertex_buffer& vbo, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm)
 {
     enable_attr(index, vbo, elem_from, elem_count, stride, norm);
+}
+
+void vertex_array::element_buffer(ogl::element_buffer& ebo)
+{
+    bind();
+    ebo_ = &ebo;
+    ebo_->bind();
+    unbind();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
