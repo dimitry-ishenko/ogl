@@ -78,6 +78,44 @@ void vertex_buffer::bind() { ogl::bind(GL_ARRAY_BUFFER, vbo_); }
 void vertex_buffer::unbind() { ogl::unbind(GL_ARRAY_BUFFER); }
 
 ////////////////////////////////////////////////////////////////////////////////
+element_buffer::element_buffer() : ebo_{create()} { }
+
+element_buffer::~element_buffer() { delete_(ebo_); }
+
+element_buffer::element_buffer(element_buffer&& rhs) :
+    ebo_{rhs.ebo_}, size_{rhs.size_}
+{
+    rhs.ebo_ = 0;
+    rhs.size_ = 0;
+}
+
+element_buffer& element_buffer::operator=(element_buffer&& rhs)
+{
+    element_buffer::~element_buffer();
+
+    ebo_ = rhs.ebo_;
+    size_ = rhs.size_;
+
+    rhs.ebo_ = 0;
+    rhs.size_ = 0;
+
+    return (*this);
+}
+
+void element_buffer::data(const void* payload, std::size_t bytes)
+{
+    bind();
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, bytes, payload, GL_STATIC_DRAW);
+    if (auto ev = glGetError()) throw opengl_error(ev);
+
+    unbind();
+}
+
+void element_buffer::bind() { ogl::bind(GL_ELEMENT_ARRAY_BUFFER, ebo_); }
+void element_buffer::unbind() { ogl::unbind(GL_ELEMENT_ARRAY_BUFFER); }
+
+////////////////////////////////////////////////////////////////////////////////
 namespace { static constexpr unsigned no_index = -1; }
 
 vertex_attr::vertex_attr(unsigned index, vertex_buffer& vbo, ogl::norm norm) :

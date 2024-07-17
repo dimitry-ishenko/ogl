@@ -28,9 +28,12 @@ void clear(const color&);
 
 class shader_program;
 class vertex_attr;
+class element_buffer;
 class vertex_array;
 
 void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t count);
+void draw_trias(shader_program&, vertex_attr&, element_buffer&, std::size_t from, std::size_t count);
+
 void draw_trias(shader_program&, vertex_array&, std::size_t from, std::size_t count);
 
 ////////////////////////////////////////////////////////////////////////////////

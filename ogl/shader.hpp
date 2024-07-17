@@ -46,6 +46,7 @@ using shaders = std::initializer_list<shader>;
 
 class vertex_attr;
 class vertex_array;
+class element_buffer;
 
 class shader_program : public movable
 {
@@ -57,6 +58,7 @@ class shader_program : public movable
     void use();
 
     friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
+    friend void draw_trias(shader_program&, vertex_attr&, element_buffer&, std::size_t, std::size_t);
     friend void draw_trias(shader_program&, vertex_array&, std::size_t, std::size_t);
 
 public:

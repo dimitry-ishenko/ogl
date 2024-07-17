@@ -65,6 +65,7 @@ void vertex_buffer::data(R&& payload)
 
 ////////////////////////////////////////////////////////////////////////////////
 class shader_program;
+class element_buffer;
 
 class vertex_attr : public movable
 {
@@ -78,6 +79,7 @@ class vertex_attr : public movable
 
     friend class vertex_array;
     friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
+    friend void draw_trias(shader_program&, vertex_attr&, element_buffer&, std::size_t, std::size_t);
 
 public:
     vertex_attr(unsigned index, vertex_buffer&, ogl::norm = dont_norm);
@@ -92,6 +94,45 @@ public:
 
     auto size() const { return size_; }
 };
+
+////////////////////////////////////////////////////////////////////////////////
+class element_buffer : public movable
+{
+    unsigned ebo_;
+
+    std::size_t value_size_;
+    unsigned opengl_type_;
+
+    std::size_t size_ = 0;
+
+    void data(const void* payload, std::size_t bytes);
+    void bind();
+    void unbind();
+
+    friend void draw_trias(shader_program&, vertex_attr&, element_buffer&, std::size_t, std::size_t);
+
+public:
+    element_buffer();
+    ~element_buffer();
+
+    element_buffer(element_buffer&&);
+    element_buffer& operator=(element_buffer&&);
+
+    template<Payload R> void data(R&& payload);
+    auto size() const { return size_; }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+template<Payload R>
+void element_buffer::data(R&& payload)
+{
+    using V = std::ranges::range_value_t<R>;
+    value_size_ = type_traits<V>::value_size;
+    opengl_type_= type_traits<V>::opengl_type;
+
+    size_ = std::size(payload);
+    data(std::data(payload), size_ * value_size_);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 class vertex_array : public movable

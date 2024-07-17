@@ -41,6 +41,7 @@ void clear(const color& c)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+////////////////////////////////////////////////////////////////////////////////
 void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t count)
 {
     pgm.use();
@@ -52,7 +53,19 @@ void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::s
     attr.disable();
 }
 
-////////////////////////////////////////////////////////////////////////////////
+void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer& ebo, std::size_t from, std::size_t count)
+{
+    pgm.use();
+    attr.enable();
+    ebo.bind();
+
+    glDrawElements(GL_TRIANGLES, count, ebo.opengl_type_, reinterpret_cast<const void*>(from * ebo.value_size_));
+    if (auto ev = glGetError()) throw opengl_error(ev);
+
+    ebo.unbind();
+    attr.disable();
+}
+
 void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::size_t count)
 {
     pgm.use();
