@@ -21,7 +21,7 @@ namespace ogl
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename R>
-concept Payload = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
+concept contiguous_sized_range = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
 
 class vertex_buffer : public movable
 {
@@ -45,12 +45,12 @@ public:
     vertex_buffer(vertex_buffer&&);
     vertex_buffer& operator=(vertex_buffer&&);
 
-    template<Payload R> void data(R&& payload);
+    template<contiguous_sized_range R> void data(R&& payload);
     auto size() const { return size_; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<Payload R>
+template<contiguous_sized_range R>
 void vertex_buffer::data(R&& payload)
 {
     using V = std::ranges::range_value_t<R>;
@@ -122,12 +122,12 @@ public:
     element_buffer(element_buffer&&);
     element_buffer& operator=(element_buffer&&);
 
-    template<Payload R> void data(R&& payload);
+    template<contiguous_sized_range R> void data(R&& payload);
     auto size() const { return size_; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<Payload R>
+template<contiguous_sized_range R>
 void element_buffer::data(R&& payload)
 {
     using V = std::ranges::range_value_t<R>;
