@@ -23,7 +23,6 @@ set(HEADERS
     ogl/types.hpp
     ogl/vec.hpp
     ogl/vertex.hpp
-    ogl/vertex.ipp
     ogl/window.hpp
 )
 set(MAIN_HEADER ogl.hpp)
