@@ -11,8 +11,6 @@
 #include <ogl/types.hpp> // movable
 
 #include <cstddef>
-#include <initializer_list>
-#include <ranges>
 #include <string_view>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -23,7 +21,7 @@ namespace ogl
 class shader : public movable
 {
 protected:
-    unsigned shad;
+    unsigned shader_;
     friend class shader_program;
 
     shader(unsigned type, std::string_view src);
@@ -39,22 +37,13 @@ struct fragment_shader : shader { explicit fragment_shader(std::string_view src)
 struct vertex_shader : shader { explicit vertex_shader(std::string_view src); };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<typename R>
-concept Shaders = std::ranges::range<R> && std::derived_from< std::ranges::range_value_t<R>, shader >;
-
-using shaders = std::initializer_list<shader>;
-
 class vertex_attr;
 class vertex_array;
 class element_buffer;
 
 class shader_program : public movable
 {
-    unsigned pgm;
-
-    shader_program();
-    void attach(const shader&);
-    void link();
+    unsigned pgm_;
     void use();
 
     friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
@@ -62,16 +51,14 @@ class shader_program : public movable
     friend void draw_trias(shader_program&, vertex_array&, std::size_t, std::size_t);
 
 public:
-    template<Shaders S>
-    shader_program(S&& shaders) : shader_program{ }
-    {
-        for(auto&& shader : shaders) attach(shader);
-        link();
-    }
+    shader_program();
     ~shader_program();
 
     shader_program(shader_program&&);
     shader_program& operator=(shader_program&&);
+
+    void attach(const shader&);
+    void link();
 };
 
 ////////////////////////////////////////////////////////////////////////////////

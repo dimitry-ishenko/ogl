@@ -15,37 +15,37 @@ namespace ogl
 
 ////////////////////////////////////////////////////////////////////////////////
 shader::shader(unsigned type, std::string_view src) :
-    shad{ glCreateShader(type) }
+    shader_{ glCreateShader(type) }
 {
-    if (!shad) throw opengl_error(glGetError());
+    if (!shader_) throw opengl_error(glGetError());
 
     const char* data = src.data();
     int size = src.size();
 
-    glShaderSource(shad, 1, &data, &size);
-    glCompileShader(shad);
+    glShaderSource(shader_, 1, &data, &size);
+    glCompileShader(shader_);
 
     int status;
-    glGetShaderiv(shad, GL_COMPILE_STATUS, &status);
+    glGetShaderiv(shader_, GL_COMPILE_STATUS, &status);
     if (!status)
     {
         char data[1024];
         int size = 0;
-        glGetShaderInfoLog(shad, sizeof(data), &size, data);
+        glGetShaderInfoLog(shader_, sizeof(data), &size, data);
 
         throw opengl_error{ glsl_syntax_error, std::string(data, size) };
     }
 }
 
-shader::~shader() { glDeleteShader(shad); }
+shader::~shader() { glDeleteShader(shader_); }
 
-shader::shader(shader&& rhs) : shad{rhs.shad} { rhs.shad = 0; }
+shader::shader(shader&& rhs) : shader_{rhs.shader_} { rhs.shader_ = 0; }
 
 shader& shader::operator=(shader&& rhs)
 {
     shader::~shader();
-    shad = rhs.shad;
-    rhs.shad = 0;
+    shader_ = rhs.shader_;
+    rhs.shader_ = 0;
     return (*this);
 }
 
@@ -54,41 +54,41 @@ vertex_shader::vertex_shader(std::string_view src) : shader{GL_VERTEX_SHADER, sr
 
 ////////////////////////////////////////////////////////////////////////////////
 shader_program::shader_program() :
-    pgm{ glCreateProgram() }
+    pgm_{ glCreateProgram() }
 {
-    if (!pgm) throw opengl_error(glGetError());
+    if (!pgm_) throw opengl_error(glGetError());
 }
 
-shader_program::~shader_program() { glDeleteProgram(pgm); }
+shader_program::~shader_program() { glDeleteProgram(pgm_); }
 
-shader_program::shader_program(shader_program&& rhs) : pgm{rhs.pgm} { rhs.pgm = 0; }
+shader_program::shader_program(shader_program&& rhs) : pgm_{rhs.pgm_} { rhs.pgm_ = 0; }
 
 shader_program& shader_program::operator=(shader_program&& rhs)
 {
     shader_program::~shader_program();
-    pgm = rhs.pgm;
-    rhs.pgm = 0;
+    pgm_ = rhs.pgm_;
+    rhs.pgm_ = 0;
     return (*this);
 }
 
 void shader_program::attach(const shader& s)
 {
-    glAttachShader(pgm, s.shad);
+    glAttachShader(pgm_, s.shader_);
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 
 void shader_program::link()
 {
-    glLinkProgram(pgm);
+    glLinkProgram(pgm_);
     if (auto ev = glGetError()) throw opengl_error(ev);
 
     int status;
-    glGetProgramiv(pgm, GL_LINK_STATUS, &status);
+    glGetProgramiv(pgm_, GL_LINK_STATUS, &status);
     if (!status)
     {
         char data[1024];
         int size = 0;
-        glGetProgramInfoLog(pgm, sizeof(data), &size, data);
+        glGetProgramInfoLog(pgm_, sizeof(data), &size, data);
 
         throw opengl_error{ glsl_link_error, std::string(data, size) };
     }
@@ -96,7 +96,7 @@ void shader_program::link()
 
 void shader_program::use()
 {
-    glUseProgram(pgm);
+    glUseProgram(pgm_);
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 
