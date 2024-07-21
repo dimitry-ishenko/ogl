@@ -14,3 +14,4 @@ add_executable(ex1_5.8.2 ex1_5.8.2.cpp)
 add_executable(ex1_5.8.3 ex1_5.8.3.cpp)
 
 add_executable(ex1_6.3   ex1_6.3.cpp)
+add_executable(ex1_6.4   ex1_6.4.cpp)
