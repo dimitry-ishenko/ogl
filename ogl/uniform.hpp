@@ -5,30 +5,36 @@
 // Distributed under the GNU GPL license. See the LICENSE.md file for details.
 
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef OGL_SHADER_IPP
-#define OGL_SHADER_IPP
+#ifndef OGL_UNIFORM_HPP
+#define OGL_UNIFORM_HPP
 
-#include <ogl/shader.hpp>
-#include <ogl/uniform.hpp>
+#include <string_view>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-template<derived_from_shader Shader, derived_from_shader... Shaders>
-void shader_program::attach(Shader&& shader, Shaders&&... shaders)
-{
-    attach_(std::forward<Shader>(shader));
-    if constexpr (sizeof...(shaders)) attach(std::forward<Shaders>(shaders)...);
-}
+class shader_program;
 
-////////////////////////////////////////////////////////////////////////////////
 template<typename V>
-uniform<V> shader_program::get_uniform(std::string_view name) { return uniform<V>{ this, name }; }
+class uniform
+{
+    shader_program* pgm_;
+    unsigned loc_;
+
+    uniform(shader_program*, std::string_view name);
+
+    friend class shader_program;
+public:
+
+    uniform<V>& operator=(const V&);
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 }
+
+#include <ogl/uniform.ipp>
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

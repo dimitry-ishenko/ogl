@@ -24,6 +24,7 @@ public:
         {
         case glsl_syntax_error:             return "GLSL syntax error";
         case glsl_link_error:               return "GLSL link error";
+        case glsl_no_such_variable:         return "No such GLSL variable";
 
         case GLEW_ERROR_NO_GL_VERSION:
         case GLEW_ERROR_GL_VERSION_10_ONLY:
@@ -60,6 +61,7 @@ public:
         {
         case glsl_syntax_error:             return runtime_error;
         case glsl_link_error:               return runtime_error;
+        case glsl_no_such_variable:         return runtime_error;
 
         case GLEW_ERROR_NO_GL_VERSION:      return resource_unavailable;
         case GLEW_ERROR_GL_VERSION_10_ONLY: return resource_unavailable;

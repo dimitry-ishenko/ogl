@@ -29,6 +29,8 @@ set(HEADERS
     ogl/shader.ipp
     ogl/traits.hpp
     ogl/types.hpp
+    ogl/uniform.hpp
+    ogl/uniform.ipp
     ogl/vec.hpp
     ogl/vertex.hpp
     ogl/vertex.ipp
@@ -40,6 +42,7 @@ set(SOURCES
     src/core.cpp
     src/error.cpp
     src/shader.cpp
+    src/uniform.cpp
     src/vertex.cpp
     src/window.cpp
 )

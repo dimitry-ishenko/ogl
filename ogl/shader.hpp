@@ -43,6 +43,7 @@ concept derived_from_shader = std::derived_from< std::remove_cvref_t<S>, shader 
 class vertex_attr;
 class vertex_array;
 template<typename> class element_buffer;
+template<typename> class uniform;
 
 class shader_program : public movable
 {
@@ -57,6 +58,8 @@ class shader_program : public movable
     template<typename V>
     friend void draw_trias(shader_program&, vertex_attr&, element_buffer<V>&, std::size_t, std::size_t);
 
+    template<typename> friend class uniform;
+
 public:
     shader_program();
     ~shader_program();
@@ -67,6 +70,8 @@ public:
     template<derived_from_shader Shader, derived_from_shader... Shaders>
     void attach(Shader&&, Shaders&&...);
     void link();
+
+    template<typename V> uniform<V> get_uniform(std::string_view name);
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -5,10 +5,12 @@
 // Distributed under the GNU GPL license. See the LICENSE.md file for details.
 
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef OGL_SHADER_IPP
-#define OGL_SHADER_IPP
+#ifndef OGL_UNIFORM_IPP
+#define OGL_UNIFORM_IPP
 
+#include <ogl/error.hpp>
 #include <ogl/shader.hpp>
+#include <ogl/traits.hpp>
 #include <ogl/uniform.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,16 +18,30 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-template<derived_from_shader Shader, derived_from_shader... Shaders>
-void shader_program::attach(Shader&& shader, Shaders&&... shaders)
+namespace internal
 {
-    attach_(std::forward<Shader>(shader));
-    if constexpr (sizeof...(shaders)) attach(std::forward<Shaders>(shaders)...);
+
+unsigned get_uniform(unsigned pgm, std::string_view name);
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
-uniform<V> shader_program::get_uniform(std::string_view name) { return uniform<V>{ this, name }; }
+uniform<V>::uniform(shader_program* pgm, std::string_view name) :
+    pgm_{pgm}, loc_{ internal::get_uniform(pgm->pgm_, name) }
+{ }
+
+template<typename V>
+uniform<V>& uniform<V>::operator=(const V& val)
+{
+    pgm_->use();
+
+    using elem_type = type_traits<V>::elem_type;
+    (*type_traits<V>::set_uniform)(loc_, 1, reinterpret_cast<const elem_type*>(&val));
+    if (auto ev = glGetError()) throw opengl_error(ev);
+
+    return (*this);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 }

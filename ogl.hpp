@@ -4,6 +4,7 @@
 #include <ogl/shader.hpp>
 #include <ogl/traits.hpp>
 #include <ogl/types.hpp>
+#include <ogl/uniform.hpp>
 #include <ogl/vec.hpp>
 #include <ogl/vertex.hpp>
 #include <ogl/window.hpp>
