@@ -65,16 +65,14 @@ public:
     shader_program& operator=(shader_program&&);
 
     template<derived_from_shader Shader, derived_from_shader... Shaders>
-    void attach(Shader&& shader, Shaders&&... shaders)
-    {
-        attach_(std::forward<Shader>(shader));
-        if constexpr (sizeof...(shaders)) attach(std::forward<Shaders>(shaders)...);
-    }
+    void attach(Shader&&, Shaders&&...);
     void link();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 }
+
+#include <ogl/shader.ipp>
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif
