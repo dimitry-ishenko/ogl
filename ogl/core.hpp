@@ -5,8 +5,8 @@
 // Distributed under the GNU GPL license. See the LICENSE.md file for details.
 
 ////////////////////////////////////////////////////////////////////////////////
-#ifndef OGL_CONTEXT_HPP
-#define OGL_CONTEXT_HPP
+#ifndef OGL_CORE_HPP
+#define OGL_CORE_HPP
 
 #include <ogl/color.hpp>
 #include <ogl/types.hpp>
