@@ -35,8 +35,7 @@ void main()
 })"} );
     pgm.link();
 
-    ogl::vertex_buffer vbo;
-    vbo.data(std::array{
+    ogl::vertex_buffer vbo { std::array{
         vec3{  .5,  .5, 0. }, // top right
         vec3{  .5, -.5, 0. }, // bottom right
         vec3{ -.5,  .5, 0. }, // top left
@@ -44,10 +43,10 @@ void main()
         vec3{  .5, -.5, 0. }, // bottom right
         vec3{ -.5, -.5, 0. }, // bottom left
         vec3{ -.5,  .5, 0. }, // top left
-    });
+    } };
 
     ogl::vertex_array vao;
-    vao.vertex_attr(0, vbo);
+    vao.enable_attr(0, vbo);
 
     while (!win.should_close())
     {

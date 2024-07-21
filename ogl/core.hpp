@@ -9,7 +9,7 @@
 #define OGL_CORE_HPP
 
 #include <ogl/color.hpp>
-#include <ogl/types.hpp>
+#include <cstddef>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace ogl
@@ -25,16 +25,24 @@ void clear(const color&);
 
 class shader_program;
 class vertex_attr;
-class element_buffer;
+template<typename> class element_buffer;
 class vertex_array;
 
+void draw_trias(shader_program&, vertex_attr&, std::size_t from = 0);
 void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t count);
-void draw_trias(shader_program&, vertex_attr&, element_buffer&, std::size_t from, std::size_t count);
+
+template<typename V>
+void draw_trias(shader_program&, vertex_attr&, element_buffer<V>&, std::size_t from = 0);
+
+template<typename V>
+void draw_trias(shader_program&, vertex_attr&, element_buffer<V>&, std::size_t from, std::size_t count);
 
 void draw_trias(shader_program&, vertex_array&, std::size_t from, std::size_t count);
 
 ////////////////////////////////////////////////////////////////////////////////
 }
+
+#include <ogl/core.ipp>
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

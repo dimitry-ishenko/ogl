@@ -22,6 +22,7 @@ find_package(OpenGL REQUIRED)
 set(HEADERS
     ogl/color.hpp
     ogl/core.hpp
+    ogl/core.ipp
     ogl/error.hpp
     ogl/extern.hpp
     ogl/shader.hpp
@@ -29,6 +30,7 @@ set(HEADERS
     ogl/types.hpp
     ogl/vec.hpp
     ogl/vertex.hpp
+    ogl/vertex.ipp
     ogl/window.hpp
 )
 set(MAIN_HEADER ogl.hpp)

@@ -33,6 +33,11 @@ void clear(const color& c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from)
+{
+    draw_trias(pgm, attr, from, attr.size() - from);
+}
+
 void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t count)
 {
     pgm.use();
@@ -44,17 +49,13 @@ void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::s
     attr.disable();
 }
 
-void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer& ebo, std::size_t from, std::size_t count)
+namespace internal
 {
-    pgm.use();
-    attr.enable();
-    ebo.bind();
-
-    glDrawElements(GL_TRIANGLES, count, ebo.opengl_type_, reinterpret_cast<const void*>(from * ebo.value_size_));
+void draw_ebo_trias(unsigned count, unsigned type, std::size_t off)
+{
+    glDrawElements(GL_TRIANGLES, count, type, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
-
-    ebo.unbind();
-    attr.disable();
+}
 }
 
 void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::size_t count)
@@ -62,9 +63,9 @@ void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::s
     pgm.use();
     vao.bind();
 
-    if (vao.ebo_)
+    if (vao.ebo_.bound)
     {
-        glDrawElements(GL_TRIANGLES, count, vao.ebo_->opengl_type_, reinterpret_cast<const void*>(from * vao.ebo_->value_size_));
+        glDrawElements(GL_TRIANGLES, count, vao.ebo_.opengl_type, reinterpret_cast<const void*>(from * vao.ebo_.value_size));
         if (auto ev = glGetError()) throw opengl_error(ev);
     }
     else

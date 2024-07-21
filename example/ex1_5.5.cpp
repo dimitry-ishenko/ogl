@@ -34,29 +34,27 @@ void main()
     color = vec4(1, .5, .2, 1);
 })"} );
     pgm.link();
-/*
-    ogl::vertex_buffer vbo;
-    vbo.data(std::vector<float>{
+#if 0
+    ogl::vertex_buffer vbo{ std::vector<float>{
         -.5, -.5, 0.,
          .5, -.5, 0.,
          .0,  .5, 0.,
-    });
-    ogl::vertex_attr attr{ 0, vbo, 0, 3, ogl::packed };
-*/
-    ogl::vertex_buffer vbo;
-    vbo.data(std::array{
+    } };
+    auto attr = vbo.create_attr(0, 0, 3, ogl::packed);
+#else
+    ogl::vertex_buffer vbo{ std::array{
         vec3{ -.5, -.5, 0. },
         vec3{  .5, -.5, 0. },
         vec3{  .0,  .5, 0. },
-    });
-    ogl::vertex_attr attr{ 0, vbo };
-
+    } };
+    auto attr = vbo.create_attr(0);
+#endif
     while (!win.should_close())
     {
         if (win.key_state(ogl::key_escape) == ogl::pressed) win.should_close(true);
 
         ogl::clear(ogl::color{.2, .3, .3, 1});
-        ogl::draw_trias(pgm, attr, 0, attr.size());
+        ogl::draw_trias(pgm, attr);
 
         win.swap_buffers();
         ogl::poll_events();

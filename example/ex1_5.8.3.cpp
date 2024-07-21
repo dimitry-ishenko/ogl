@@ -49,25 +49,23 @@ void main()
     pgm2.attach(vert, yellow);
     pgm2.link();
 
-    ogl::vertex_buffer vbo1;
-    vbo1.data(std::array{
+    ogl::vertex_buffer vbo1{ std::array{
         vec3{ -.5,  .5, 0. },
         vec3{  0., -.5, 0. },
         vec3{ -1., -.5, 0. },
-    });
+    } };
 
     ogl::vertex_array vao1;
-    vao1.vertex_attr(0, vbo1);
+    vao1.enable_attr(0, vbo1);
 
-    ogl::vertex_buffer vbo2;
-    vbo2.data(std::array{
+    ogl::vertex_buffer vbo2{ std::array{
         vec3{  0.,  .5, 0. },
         vec3{  1.,  .5, 0. },
         vec3{  .5, -.5, 0. },
-    });
+    } };
 
     ogl::vertex_array vao2;
-    vao2.vertex_attr(0, vbo2);
+    vao2.enable_attr(0, vbo2);
 
     while (!win.should_close())
     {

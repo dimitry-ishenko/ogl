@@ -35,24 +35,25 @@ void main()
 })"} );
     pgm.link();
 
-    ogl::vertex_buffer vbo;
-    vbo.data(std::array{
+    ogl::vertex_buffer vbo{ std::array{
         vec3{  .5,  .5, 0. }, // top right
         vec3{  .5, -.5, 0. }, // bottom right
         vec3{ -.5, -.5, 0. }, // bottom left
         vec3{ -.5,  .5, 0. }, // top left
-    });
-/*  ogl::vertex_attr attr{ 0, vbo };
+    } };
+/*  auto attr = vbo.create_attr(0);
 
-    ogl::element_buffer ebo;
-    ebo.data(std::vector<unsigned>{ 0, 1, 3, 1, 2, 3 });
+    ogl::element_buffer ebo{ std::vector<unsigned>{
+        0, 1, 3, 1, 2, 3
+    } };
 */
-    ogl::element_buffer ebo2;
-    ebo2.data(std::vector<unsigned>{ 0, 1, 2, 0, 2, 3 });
+    ogl::element_buffer ebo2{ std::vector<unsigned>{
+        0, 1, 2, 0, 2, 3
+    } };
 
     ogl::vertex_array vao;
-    vao.vertex_attr(0, vbo);
-    vao.element_buffer(ebo2);
+    vao.enable_attr(0, vbo);
+    vao.set_elements(ebo2);
 
     while (!win.should_close())
     {

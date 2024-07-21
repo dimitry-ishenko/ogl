@@ -35,8 +35,7 @@ void main()
 })"} );
     pgm.link();
 /*
-    ogl::vertex_buffer vbo;
-    vbo.data(std::array{
+    ogl::vertex_buffer vbo{ std::array{
         vec3{  .5,  .5, 0. }, // top right
         vec3{  .5, -.5, 0. }, // bottom right
         vec3{ -.5,  .5, 0. }, // top left
@@ -44,20 +43,20 @@ void main()
         vec3{  .5, -.5, 0. }, // bottom right
         vec3{ -.5, -.5, 0. }, // bottom left
         vec3{ -.5,  .5, 0. }, // top left
-    });
-    ogl::vertex_attr attr{ 0, vbo };
+    } };
+    auto attr = vbo.create_attr(0);
 */
-    ogl::vertex_buffer vbo2;
-    vbo2.data(std::array{
+    ogl::vertex_buffer vbo2{ std::array{
         vec3{  .5,  .5, 0. }, // top right
         vec3{  .5, -.5, 0. }, // bottom right
         vec3{ -.5, -.5, 0. }, // bottom left
         vec3{ -.5,  .5, 0. }, // top left
-    });
-    ogl::vertex_attr attr2{ 0, vbo2 };
+    } };
+    auto attr2 = vbo2.create_attr(0);
 
-    ogl::element_buffer ebo;
-    ebo.data(std::vector<unsigned>{ 0, 1, 3, 1, 2, 3 });
+    ogl::element_buffer ebo{ std::vector<unsigned>{
+        0, 1, 3, 1, 2, 3
+    } };
 
     while (!win.should_close())
     {
@@ -65,8 +64,8 @@ void main()
 
         ogl::clear(ogl::color{.2, .3, .3, 1});
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        //ogl::draw_trias(pgm, attr, 0, attr.size());
-        ogl::draw_trias(pgm, attr2, ebo, 0, ebo.size());
+        //ogl::draw_trias(pgm, attr);
+        ogl::draw_trias(pgm, attr2, ebo);
 
         win.swap_buffers();
         ogl::poll_events();

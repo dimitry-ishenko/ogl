@@ -35,33 +35,31 @@ void main()
 })"} );
     pgm.link();
 
-    ogl::vertex_buffer vbo_1;
-    vbo_1.data(std::array{
+    ogl::vertex_buffer vbo1{ std::array{
         vec3{ -.5,  .5, 0. },
         vec3{  0., -.5, 0. },
         vec3{ -1., -.5, 0. },
-    });
+    } };
 
-    ogl::vertex_array vao_1;
-    vao_1.vertex_attr(0, vbo_1);
+    ogl::vertex_array vao1;
+    vao1.enable_attr(0, vbo1);
 
-    ogl::vertex_buffer vbo_2;
-    vbo_2.data(std::array{
+    ogl::vertex_buffer vbo2{ std::array{
         vec3{  0.,  .5, 0. },
         vec3{  1.,  .5, 0. },
         vec3{  .5, -.5, 0. },
-    });
+    } };
 
-    ogl::vertex_array vao_2;
-    vao_2.vertex_attr(0, vbo_2);
+    ogl::vertex_array vao2;
+    vao2.enable_attr(0, vbo2);
 
     while (!win.should_close())
     {
         if (win.key_state(ogl::key_escape) == ogl::pressed) win.should_close(true);
 
         ogl::clear(ogl::color{.2, .3, .3, 1});
-        ogl::draw_trias(pgm, vao_1, 0, vbo_1.size());
-        ogl::draw_trias(pgm, vao_2, 0, vbo_2.size());
+        ogl::draw_trias(pgm, vao1, 0, vbo1.size());
+        ogl::draw_trias(pgm, vao2, 0, vbo2.size());
 
         win.swap_buffers();
         ogl::poll_events();
