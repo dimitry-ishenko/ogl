@@ -50,8 +50,11 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+template<typename R>
+concept contiguous_sized_range = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
+
 template<typename R, typename V>
-concept contiguous_sized_range = std::ranges::contiguous_range<R> && std::ranges::sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
+concept contiguous_sized_range_of = contiguous_sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
 
 template<typename V>
 class buffer : public movable
@@ -70,9 +73,7 @@ protected:
     static constexpr auto opengl_type= type_traits<V>::opengl_type;
 
     explicit buffer(unsigned target);
-    template<contiguous_sized_range<V> R> explicit buffer(unsigned target, R&& payload);
-
-    template<contiguous_sized_range<V> R> void data(R&& payload);
+    template<contiguous_sized_range_of<V> R> buffer(unsigned target, R&& payload);
 
     void bind();
     void unbind();
@@ -82,6 +83,9 @@ public:
 
     buffer(buffer&&);
     buffer& operator=(buffer&&);
+
+    template<contiguous_sized_range_of<V> R> void data(R&& payload);
+    template<contiguous_sized_range R> void user_data(R&& payload);
 
     auto size() const { return size_; }
 };
@@ -95,7 +99,7 @@ class vertex_buffer : public buffer<V>
 {
 public:
     vertex_buffer();
-    template<contiguous_sized_range<V> R> explicit vertex_buffer(R&& payload);
+    template<contiguous_sized_range_of<V> R> explicit vertex_buffer(R&& payload);
 
     vertex_attr create_attr(unsigned index, ogl::norm = dont_norm);
     vertex_attr create_attr(unsigned index, packed_t, ogl::norm = dont_norm);
@@ -118,7 +122,7 @@ class element_buffer : public buffer<V>
 
 public:
     element_buffer();
-    template<contiguous_sized_range<V> R> explicit element_buffer(R&& payload);
+    template<contiguous_sized_range_of<V> R> explicit element_buffer(R&& payload);
 };
 
 template<typename R>

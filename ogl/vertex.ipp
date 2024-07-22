@@ -12,6 +12,7 @@
 
 #include <cstddef>
 #include <iterator>
+#include <ranges>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace ogl
@@ -39,7 +40,7 @@ template<typename V>
 buffer<V>::buffer(unsigned target) : name_{ internal::create_buffer() }, target_{target} { }
 
 template<typename V>
-template<contiguous_sized_range<V> R>
+template<contiguous_sized_range_of<V> R>
 buffer<V>::buffer(unsigned target, R&& payload) : buffer{target}
 {
     data(std::forward<R>(payload));
@@ -69,11 +70,19 @@ buffer<V>& buffer<V>::operator=(buffer<V>&& rhs)
 }
 
 template<typename V>
-template<contiguous_sized_range<V> R>
-void buffer<V>::data(R&& payload)
+template<contiguous_sized_range_of<V> R>
+void buffer<V>::data(R&& payload) { user_data(std::forward<R>(payload)); }
+
+template<typename V>
+template<contiguous_sized_range R>
+void buffer<V>::user_data(R&& payload)
 {
+    constexpr auto payload_value_size = sizeof(std::ranges::range_value_t<R>);
+    constexpr auto ratio = payload_value_size / value_size;
+    static_assert(payload_value_size % value_size == 0, "Incompatible payload type");
+
     bind();
-    size_ = std::size(payload);
+    size_ = ratio * std::size(payload);
     internal::buffer_data(target_, std::data(payload), size_ * value_size);
     unbind();
 }
@@ -89,7 +98,7 @@ template<typename V>
 vertex_buffer<V>::vertex_buffer() : buffer<V>{ internal::array_target } { }
 
 template<typename V>
-template<contiguous_sized_range<V> R>
+template<contiguous_sized_range_of<V> R>
 vertex_buffer<V>::vertex_buffer(R&& payload) : buffer<V>{ internal::array_target, std::forward<R>(payload) } { }
 
 template<typename V>
@@ -137,7 +146,7 @@ template<typename V>
 element_buffer<V>::element_buffer() : buffer<V>{ internal::element_target } { }
 
 template<typename V>
-template<contiguous_sized_range<V> R>
+template<contiguous_sized_range_of<V> R>
 element_buffer<V>::element_buffer(R&& payload) : buffer<V>{ internal::element_target, std::forward<R>(payload) } { }
 
 ////////////////////////////////////////////////////////////////////////////////
