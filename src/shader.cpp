@@ -71,7 +71,7 @@ shader_program& shader_program::operator=(shader_program&& rhs)
     return (*this);
 }
 
-void shader_program::attach_(const shader& s)
+void shader_program::attach(const shader& s)
 {
     glAttachShader(pgm_, s.shader_);
     if (auto ev = glGetError()) throw opengl_error(ev);

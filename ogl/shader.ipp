@@ -16,14 +16,6 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-template<derived_from_shader Shader, derived_from_shader... Shaders>
-void shader_program::attach(Shader&& shader, Shaders&&... shaders)
-{
-    attach_(std::forward<Shader>(shader));
-    if constexpr (sizeof...(shaders)) attach(std::forward<Shaders>(shaders)...);
-}
-
-////////////////////////////////////////////////////////////////////////////////
 template<typename V>
 uniform<V> shader_program::get_uniform(std::string_view name) { return uniform<V>{ this, name }; }
 

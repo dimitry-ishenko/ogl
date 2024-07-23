@@ -37,9 +37,6 @@ struct fragment_shader : shader { explicit fragment_shader(std::string_view src)
 struct vertex_shader : shader { explicit vertex_shader(std::string_view src); };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<typename S>
-concept derived_from_shader = std::derived_from< std::remove_cvref_t<S>, shader >;
-
 class vertex_attr;
 class vertex_array;
 template<typename> class element_buffer;
@@ -49,7 +46,6 @@ class shader_program : public movable
 {
     unsigned pgm_;
 
-    void attach_(const shader&);
     void use();
 
     friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
@@ -67,8 +63,7 @@ public:
     shader_program(shader_program&&);
     shader_program& operator=(shader_program&&);
 
-    template<derived_from_shader Shader, derived_from_shader... Shaders>
-    void attach(Shader&&, Shaders&&...);
+    void attach(const shader&);
     void link();
 
     template<typename V> uniform<V> get_uniform(std::string_view name);

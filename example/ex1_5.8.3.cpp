@@ -42,11 +42,13 @@ void main()
 })"};
 
     ogl::shader_program pgm1;
-    pgm1.attach(vert, orange);
+    pgm1.attach(vert);
+    pgm1.attach(orange);
     pgm1.link();
 
     ogl::shader_program pgm2;
-    pgm2.attach(vert, yellow);
+    pgm2.attach(vert);
+    pgm2.attach(yellow);
     pgm2.link();
 
     ogl::vertex_buffer vbo1{ std::array{
