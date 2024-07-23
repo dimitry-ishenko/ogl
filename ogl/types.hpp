@@ -44,6 +44,8 @@ enum version
 ////////////////////////////////////////////////////////////////////////////////
 enum norm { dont_norm = GL_FALSE, normalize = GL_TRUE };
 
+enum type { }; // OpenGL type
+
 ////////////////////////////////////////////////////////////////////////////////
 enum key_state
 {
@@ -185,14 +187,14 @@ namespace internal
 template<typename T>
 consteval auto opengl_type()
 {
-         if constexpr (std::is_same_v<T, std::int8_t>  ) return GL_BYTE;
-    else if constexpr (std::is_same_v<T, std::uint8_t> ) return GL_UNSIGNED_BYTE;
-    else if constexpr (std::is_same_v<T, std::int16_t> ) return GL_SHORT;
-    else if constexpr (std::is_same_v<T, std::uint16_t>) return GL_UNSIGNED_SHORT;
-    else if constexpr (std::is_same_v<T, std::int32_t> ) return GL_INT;
-    else if constexpr (std::is_same_v<T, std::uint32_t>) return GL_UNSIGNED_INT;
-    else if constexpr (std::is_same_v<T, float        >) return GL_FLOAT;
-    else if constexpr (std::is_same_v<T, double       >) return GL_DOUBLE;
+         if constexpr (std::is_same_v<T, std::int8_t>  ) return static_cast<type>(GL_BYTE);
+    else if constexpr (std::is_same_v<T, std::uint8_t> ) return static_cast<type>(GL_UNSIGNED_BYTE);
+    else if constexpr (std::is_same_v<T, std::int16_t> ) return static_cast<type>(GL_SHORT);
+    else if constexpr (std::is_same_v<T, std::uint16_t>) return static_cast<type>(GL_UNSIGNED_SHORT);
+    else if constexpr (std::is_same_v<T, std::int32_t> ) return static_cast<type>(GL_INT);
+    else if constexpr (std::is_same_v<T, std::uint32_t>) return static_cast<type>(GL_UNSIGNED_INT);
+    else if constexpr (std::is_same_v<T, float        >) return static_cast<type>(GL_FLOAT);
+    else if constexpr (std::is_same_v<T, double       >) return static_cast<type>(GL_DOUBLE);
     else static_assert(false, "Unsupported data type");
 }
 

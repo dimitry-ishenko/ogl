@@ -16,10 +16,10 @@ namespace ogl
 ////////////////////////////////////////////////////////////////////////////////
 namespace { static constexpr unsigned no_index = -1; }
 
-vertex_attr::vertex_attr(unsigned index, std::size_t size, std::size_t count, unsigned type, ogl::norm norm, std::size_t stride, std::size_t off) :
+vertex_attr::vertex_attr(unsigned index, std::size_t size, std::size_t count, type opengl_type, ogl::norm norm, std::size_t stride, std::size_t off) :
     index_{index}, size_{size}
 {
-    glVertexAttribPointer(index_, count, type, norm, stride, reinterpret_cast<const void*>(off));
+    glVertexAttribPointer(index_, count, opengl_type, norm, stride, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 

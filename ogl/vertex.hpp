@@ -23,7 +23,7 @@ class vertex_attr : public movable
     unsigned index_;
     std::size_t size_;
 
-    vertex_attr(unsigned index, std::size_t size, std::size_t count, unsigned type, ogl::norm, std::size_t stride, std::size_t off);
+    vertex_attr(unsigned index, std::size_t size, std::size_t count, type, norm, std::size_t stride, std::size_t off);
 
     template<typename> friend class vertex_buffer;
 
@@ -115,7 +115,7 @@ class vertex_array : public movable
     struct
     {
         bool bound = false;
-        unsigned opengl_type;
+        type opengl_type;
         std::size_t value_size;
     }
     ebo_;

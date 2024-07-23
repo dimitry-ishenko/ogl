@@ -49,9 +49,9 @@ void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::s
 
 namespace internal
 {
-void draw_ebo_trias(unsigned count, unsigned type, std::size_t off)
+void draw_ebo_trias(unsigned count, type opengl_type, std::size_t off)
 {
-    glDrawElements(GL_TRIANGLES, count, type, reinterpret_cast<const void*>(off));
+    glDrawElements(GL_TRIANGLES, count, opengl_type, reinterpret_cast<const void*>(off));
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 }

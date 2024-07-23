@@ -20,7 +20,7 @@ namespace ogl
 namespace internal
 {
 
-void draw_ebo_trias(unsigned count, unsigned type, std::size_t off);
+void draw_ebo_trias(unsigned count, type, std::size_t off);
 
 }
 
