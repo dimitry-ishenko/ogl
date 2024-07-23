@@ -83,11 +83,11 @@ public:
     vertex_buffer();
     template<contiguous_sized_range_of<V> R> explicit vertex_buffer(R&& payload);
 
-    vertex_attr create_attr(unsigned index, ogl::norm = dont_norm);
-    vertex_attr create_attr(unsigned index, packed_t, ogl::norm = dont_norm);
-    vertex_attr create_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, ogl::norm = dont_norm);
-    vertex_attr create_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm = dont_norm);
-    vertex_attr create_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm = dont_norm);
+    vertex_attr define_attr(unsigned index, ogl::norm = dont_norm);
+    vertex_attr define_attr(unsigned index, packed_t, ogl::norm = dont_norm);
+    vertex_attr define_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, ogl::norm = dont_norm);
+    vertex_attr define_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm = dont_norm);
+    vertex_attr define_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm = dont_norm);
 };
 
 template<typename R>

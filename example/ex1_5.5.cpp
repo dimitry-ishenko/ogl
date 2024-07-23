@@ -47,7 +47,7 @@ void main()
         vec3{  .5, -.5, 0. },
         vec3{  .0,  .5, 0. },
     } };
-    auto attr = vbo.create_attr(0);
+    auto attr = vbo.define_attr(0);
 #endif
     while (!win.should_close())
     {

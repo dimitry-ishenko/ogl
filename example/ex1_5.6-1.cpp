@@ -52,7 +52,7 @@ void main()
         vec3{ -.5, -.5, 0. }, // bottom left
         vec3{ -.5,  .5, 0. }, // top left
     } };
-    auto attr2 = vbo2.create_attr(0);
+    auto attr2 = vbo2.define_attr(0);
 
     ogl::element_buffer ebo{ std::vector<unsigned>{
         0, 1, 3, 1, 2, 3

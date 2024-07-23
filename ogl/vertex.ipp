@@ -99,31 +99,31 @@ template<contiguous_sized_range_of<V> R>
 vertex_buffer<V>::vertex_buffer(R&& payload) : buffer<V>{ internal::array_target, std::forward<R>(payload) } { }
 
 template<typename V>
-vertex_attr vertex_buffer<V>::create_attr(unsigned index, ogl::norm norm)
+vertex_attr vertex_buffer<V>::define_attr(unsigned index, ogl::norm norm)
 {
-    return create_attr(index, 0, this->elem_count, this->value_size, norm);
+    return define_attr(index, 0, this->elem_count, this->value_size, norm);
 }
 
 template<typename V>
-vertex_attr vertex_buffer<V>::create_attr(unsigned index, packed_t, ogl::norm norm)
+vertex_attr vertex_buffer<V>::define_attr(unsigned index, packed_t, ogl::norm norm)
 {
-    return create_attr(index, 0, this->elem_count, 0, norm);
+    return define_attr(index, 0, this->elem_count, 0, norm);
 }
 
 template<typename V>
-vertex_attr vertex_buffer<V>::create_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, ogl::norm norm)
+vertex_attr vertex_buffer<V>::define_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, ogl::norm norm)
 {
-    return create_attr(index, elem_from, elem_count, this->value_size, norm);
+    return define_attr(index, elem_from, elem_count, this->value_size, norm);
 }
 
 template<typename V>
-vertex_attr vertex_buffer<V>::create_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm norm)
+vertex_attr vertex_buffer<V>::define_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm norm)
 {
-    return create_attr(index, elem_from, elem_count, 0, norm);
+    return define_attr(index, elem_from, elem_count, 0, norm);
 }
 
 template<typename V>
-vertex_attr vertex_buffer<V>::create_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm)
+vertex_attr vertex_buffer<V>::define_attr(unsigned index, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm)
 {
     auto off = elem_from * this->elem_size;
     if (!stride) stride = elem_count * this->value_size; // stride can be 0 to indicate packed data
@@ -148,7 +148,7 @@ template<typename V, typename... Args>
 void vertex_array::enable_attr_(unsigned index, vertex_buffer<V>& vbo, Args&&... args)
 {
     bind_guard bind{*this};
-    vbo.create_attr(index, std::forward<Args>(args)...).enable();
+    vbo.define_attr(index, std::forward<Args>(args)...).enable();
 }
 
 template<typename V>
