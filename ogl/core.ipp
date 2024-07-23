@@ -10,6 +10,7 @@
 
 #include <ogl/core.hpp>
 #include <ogl/shader.hpp>
+#include <ogl/types.hpp>
 #include <ogl/vertex.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -21,13 +22,10 @@ template<typename V>
 void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer<V>& ebo, std::size_t from, std::size_t count)
 {
     pgm.use();
-    attr.enable();
-    ebo.bind();
+    enable_guard enable{attr};
+    bind_guard bind{ebo};
 
     draw_elem_trias(ebo.opengl_type, count, from * ebo.value_size);
-
-    ebo.unbind();
-    attr.disable();
 }
 
 ////////////////////////////////////////////////////////////////////////////////

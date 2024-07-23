@@ -109,7 +109,6 @@ explicit element_buffer(R&&) -> element_buffer<range_value_t<R>>;
 class vertex_array : public movable
 {
     unsigned vao_;
-
     struct
     {
         bool bound = false;

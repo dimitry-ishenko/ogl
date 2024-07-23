@@ -35,6 +35,28 @@ struct packed_t { explicit packed_t() = default; };
 inline constexpr packed_t packed{ };
 
 ////////////////////////////////////////////////////////////////////////////////
+template<typename C>
+class bind_guard
+{
+    C& obj_;
+
+public:
+    bind_guard(C& obj) : obj_{obj} { obj_.bind(); }
+    ~bind_guard() { obj_.unbind(); }
+};
+
+////////////////////////////////////////////////////////////////////////////////
+template<typename C>
+class enable_guard
+{
+    C& obj_;
+
+public:
+    enable_guard(C& obj) : obj_{obj} { obj_.enable(); }
+    ~enable_guard() { obj_.disable(); }
+};
+
+////////////////////////////////////////////////////////////////////////////////
 enum version
 {
     ver3_0 = 0x000, ver3_1, ver3_2, ver3_3,

@@ -9,6 +9,7 @@
 #define OGL_VERTEX_IPP
 
 #include <ogl/ranges.hpp>
+#include <ogl/types.hpp>
 #include <ogl/vertex.hpp>
 
 #include <cstddef>
@@ -81,17 +82,13 @@ void buffer<V>::user_data(R&& payload)
     constexpr auto ratio = payload_value_size / value_size;
     static_assert(payload_value_size % value_size == 0, "Incompatible payload type");
 
-    bind();
     size_ = ratio * std::size(payload);
+    bind_guard bind{*this};
     internal::buffer_data(target_, std::data(payload), size_ * value_size);
-    unbind();
 }
 
-template<typename V>
-void buffer<V>::bind() { internal::bind_buffer(target_, name_); }
-
-template<typename V>
-void buffer<V>::unbind() { internal::unbind_buffer(target_); }
+template<typename V> void buffer<V>::bind() { internal::bind_buffer(target_, name_); }
+template<typename V> void buffer<V>::unbind() { internal::unbind_buffer(target_); }
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
@@ -134,11 +131,8 @@ vertex_attr vertex_buffer<V>::create_attr(unsigned index, std::size_t elem_from,
     auto bytes = this->size() * this->value_size - off;
     auto attr_size = bytes / stride + ((bytes % stride) ? 1 : 0);
 
-    this->bind();
-    vertex_attr attr{ index, attr_size, elem_count, this->opengl_type, norm, stride, off };
-    this->unbind();
-
-    return attr;
+    bind_guard bind{*this};
+    return vertex_attr{ index, attr_size, elem_count, this->opengl_type, norm, stride, off };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -153,10 +147,8 @@ element_buffer<V>::element_buffer(R&& payload) : buffer<V>{ internal::element_ta
 template<typename V, typename... Args>
 void vertex_array::enable_attr_(unsigned index, vertex_buffer<V>& vbo, Args&&... args)
 {
-    bind();
-    auto attr = vbo.create_attr(index, std::forward<Args>(args)...);
-    attr.enable();
-    unbind();
+    bind_guard bind{*this};
+    vbo.create_attr(index, std::forward<Args>(args)...).enable();
 }
 
 template<typename V>
@@ -192,12 +184,9 @@ void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_
 template<typename V>
 void vertex_array::set_elements(element_buffer<V>& ebo)
 {
-    bind();
+    bind_guard bind{*this};
     ebo.bind();
-    ebo_.bound = true;
-    ebo_.opengl_type = ebo.opengl_type;
-    ebo_.value_size = ebo.value_size;
-    unbind();
+    ebo_ = { true, ebo.opengl_type, ebo.value_size };
 }
 
 ////////////////////////////////////////////////////////////////////////////////

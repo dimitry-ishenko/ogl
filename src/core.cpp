@@ -9,6 +9,7 @@
 #include <ogl/error.hpp>
 #include <ogl/extern.hpp>
 #include <ogl/shader.hpp>
+#include <ogl/types.hpp>
 #include <ogl/vertex.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -48,21 +49,18 @@ void draw_elem_trias(type opengl_type, std::size_t count, std::size_t off)
 void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t count)
 {
     pgm.use();
-    attr.enable();
+    enable_guard enable{attr};
     draw_trias(from, count);
-    attr.disable();
 }
 
 void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::size_t count)
 {
     pgm.use();
-    vao.bind();
+    bind_guard bind{vao};
 
     if (vao.ebo().bound)
         draw_elem_trias(vao.ebo().opengl_type, count, from * vao.ebo().value_size);
     else draw_trias(from, count);
-
-    vao.unbind();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
