@@ -97,10 +97,10 @@ struct type_traits
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<typename D, std::size_t N>
-struct type_traits<Vector<D, N>>
+template<vector T>
+struct type_traits<T>
 {
-    using value_type = Vector<D, N>;
+    using value_type = std::remove_cv_t<T>;
     using elem_type  = typename value_type::value_type;
 
     static constexpr auto value_size = sizeof(value_type);
