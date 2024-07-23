@@ -33,14 +33,17 @@ void clear(const color4& c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+void draw_trias(std::size_t from, std::size_t count)
+{
+    glDrawArrays(GL_TRIANGLES, from, count);
+    if (auto ev = glGetError()) throw opengl_error(ev);
+}
+
 void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t count)
 {
     pgm.use();
     attr.enable();
-
-    glDrawArrays(GL_TRIANGLES, from, count);
-    if (auto ev = glGetError()) throw opengl_error(ev);
-
+    draw_trias(from, count);
     attr.disable();
 }
 
@@ -63,11 +66,7 @@ void draw_trias(shader_program& pgm, vertex_array& vao, std::size_t from, std::s
         glDrawElements(GL_TRIANGLES, count, vao.ebo().opengl_type, reinterpret_cast<const void*>(from * vao.ebo().value_size));
         if (auto ev = glGetError()) throw opengl_error(ev);
     }
-    else
-    {
-        glDrawArrays(GL_TRIANGLES, from, count);
-        if (auto ev = glGetError()) throw opengl_error(ev);
-    }
+    else draw_trias(from, count);
 
     vao.unbind();
 }

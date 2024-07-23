@@ -28,6 +28,8 @@ class vertex_attr;
 template<typename> class element_buffer;
 class vertex_array;
 
+void draw_trias(std::size_t from, std::size_t count);
+
 void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t count);
 
 template<typename V>
