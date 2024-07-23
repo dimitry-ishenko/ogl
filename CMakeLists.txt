@@ -27,7 +27,6 @@ set(HEADERS
     ogl/extern.hpp
     ogl/ranges.hpp
     ogl/shader.hpp
-    ogl/shader.ipp
     ogl/types.hpp
     ogl/uniform.hpp
     ogl/uniform.ipp

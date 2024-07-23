@@ -20,13 +20,11 @@ class shader_program;
 template<typename V>
 class uniform
 {
-    shader_program* pgm_;
+    shader_program& pgm_;
     unsigned loc_;
 
-    uniform(shader_program*, std::string_view name);
-
-    friend class shader_program;
 public:
+    uniform(shader_program&, std::string_view name);
 
     uniform<V>& operator=(const V&);
 };

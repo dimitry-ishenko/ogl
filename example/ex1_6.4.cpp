@@ -47,7 +47,7 @@ void main()
     } };
     auto attr = vbo.create_attr(0);
 
-    auto ucol = pgm.get_uniform<vec4>("ucol");
+    ogl::uniform<vec4> ucol{ pgm, "ucol" };
 
     while (!win.should_close())
     {

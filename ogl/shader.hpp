@@ -9,8 +9,6 @@
 #define OGL_SHADER_HPP
 
 #include <ogl/types.hpp> // movable
-
-#include <cstddef>
 #include <string_view>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,22 +35,11 @@ struct fragment_shader : shader { explicit fragment_shader(std::string_view src)
 struct vertex_shader : shader { explicit vertex_shader(std::string_view src); };
 
 ////////////////////////////////////////////////////////////////////////////////
-class vertex_attr;
-class vertex_array;
-template<typename> class element_buffer;
 template<typename> class uniform;
 
 class shader_program : public movable
 {
     unsigned pgm_;
-
-    void use();
-
-    friend void draw_trias(shader_program&, vertex_attr&, std::size_t, std::size_t);
-    friend void draw_trias(shader_program&, vertex_array&, std::size_t, std::size_t);
-
-    template<typename V>
-    friend void draw_trias(shader_program&, vertex_attr&, element_buffer<V>&, std::size_t, std::size_t);
 
     template<typename> friend class uniform;
 
@@ -65,14 +52,11 @@ public:
 
     void attach(const shader&);
     void link();
-
-    template<typename V> uniform<V> get_uniform(std::string_view name);
+    void use();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 }
-
-#include <ogl/shader.ipp>
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

@@ -27,14 +27,14 @@ unsigned get_uniform(unsigned pgm, std::string_view name);
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
-uniform<V>::uniform(shader_program* pgm, std::string_view name) :
-    pgm_{pgm}, loc_{ internal::get_uniform(pgm->pgm_, name) }
+uniform<V>::uniform(shader_program& pgm, std::string_view name) :
+    pgm_{pgm}, loc_{ internal::get_uniform(pgm_.pgm_, name) }
 { }
 
 template<typename V>
 uniform<V>& uniform<V>::operator=(const V& val)
 {
-    pgm_->use();
+    pgm_.use();
 
     using elem_type = type_traits<V>::elem_type;
     (*type_traits<V>::set_uniform)(loc_, 1, reinterpret_cast<const elem_type*>(&val));
