@@ -179,7 +179,7 @@ enum key
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace detail
+namespace internal
 {
 
 template<typename T>
@@ -252,9 +252,9 @@ struct type_traits
     static constexpr auto elem_size  = sizeof(elem_type);
     static constexpr auto elem_count = 1;
 
-    static constexpr auto opengl_type = detail::opengl_type<value_type>();
-    static constexpr auto get_uniform = detail::get_uniform<elem_type, elem_count>();
-    static constexpr auto set_uniform = detail::set_uniform<elem_type, elem_count>();
+    static constexpr auto opengl_type = internal::opengl_type<value_type>();
+    static constexpr auto get_uniform = internal::get_uniform<elem_type, elem_count>();
+    static constexpr auto set_uniform = internal::set_uniform<elem_type, elem_count>();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -269,8 +269,8 @@ struct type_traits<T>
     static constexpr auto elem_count = value_type::size();
 
     static constexpr auto opengl_type = type_traits<elem_type>::opengl_type;
-    static constexpr auto get_uniform = detail::get_uniform<elem_type, elem_count>();
-    static constexpr auto set_uniform = detail::set_uniform<elem_type, elem_count>();
+    static constexpr auto get_uniform = internal::get_uniform<elem_type, elem_count>();
+    static constexpr auto set_uniform = internal::set_uniform<elem_type, elem_count>();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
