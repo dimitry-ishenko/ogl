@@ -26,7 +26,7 @@ void viewport(int x, int y, unsigned width, unsigned height)
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 
-void clear(const color& c)
+void clear(const color4& c)
 {
     glClearColor(c.r(), c.g(), c.b(), c.a());
     glClear(GL_COLOR_BUFFER_BIT);

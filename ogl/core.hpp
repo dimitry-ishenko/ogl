@@ -21,7 +21,7 @@ void wait_events();
 
 void viewport(int x, int y, unsigned width, unsigned height);
 
-void clear(const color&);
+void clear(const color4&);
 
 class shader_program;
 class vertex_attr;

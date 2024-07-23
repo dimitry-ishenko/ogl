@@ -15,7 +15,7 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-struct color : Vector<float, 4>
+struct color4 : Vector<float, 4>
 {
     constexpr auto&& r() { return e[0]; }
     constexpr auto&& r() const { return e[0]; }

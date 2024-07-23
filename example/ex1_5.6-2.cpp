@@ -59,7 +59,7 @@ void main()
     {
         if (win.key_state(ogl::key_escape) == ogl::pressed) win.should_close(true);
 
-        ogl::clear(ogl::color{.2, .3, .3, 1});
+        ogl::clear(ogl::color4{.2, .3, .3, 1});
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         //ogl::draw_trias(pgm, attr, ebo, 0, ebo.size());
         ogl::draw_trias(pgm, vao, 0, ebo2.size());

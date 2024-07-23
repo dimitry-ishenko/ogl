@@ -53,7 +53,7 @@ void main()
     {
         if (win.key_state(ogl::key_escape) == ogl::pressed) win.should_close(true);
 
-        ogl::clear(ogl::color{.2, .3, .3, 1});
+        ogl::clear(ogl::color4{.2, .3, .3, 1});
 
         using namespace std::chrono;
         auto time = duration_cast<seconds>(steady_clock::now().time_since_epoch());
