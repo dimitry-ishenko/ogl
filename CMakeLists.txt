@@ -25,6 +25,7 @@ set(HEADERS
     ogl/core.ipp
     ogl/error.hpp
     ogl/extern.hpp
+    ogl/ranges.hpp
     ogl/shader.hpp
     ogl/shader.ipp
     ogl/traits.hpp

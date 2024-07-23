@@ -8,11 +8,11 @@
 #ifndef OGL_VERTEX_IPP
 #define OGL_VERTEX_IPP
 
+#include <ogl/ranges.hpp>
 #include <ogl/vertex.hpp>
 
 #include <cstddef>
 #include <iterator>
-#include <ranges>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace ogl
@@ -77,7 +77,7 @@ template<typename V>
 template<contiguous_sized_range R>
 void buffer<V>::user_data(R&& payload)
 {
-    constexpr auto payload_value_size = sizeof(std::ranges::range_value_t<R>);
+    constexpr auto payload_value_size = sizeof(range_value_t<R>);
     constexpr auto ratio = payload_value_size / value_size;
     static_assert(payload_value_size % value_size == 0, "Incompatible payload type");
 

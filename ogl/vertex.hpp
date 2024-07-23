@@ -8,11 +8,11 @@
 #ifndef OGL_VERTEX_HPP
 #define OGL_VERTEX_HPP
 
+#include <ogl/ranges.hpp>
 #include <ogl/traits.hpp>
 #include <ogl/types.hpp>
 
 #include <cstddef>
-#include <ranges>
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace ogl
@@ -50,12 +50,6 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-template<typename R>
-concept contiguous_sized_range = std::ranges::contiguous_range<R> && std::ranges::sized_range<R>;
-
-template<typename R, typename V>
-concept contiguous_sized_range_of = contiguous_sized_range<R> && std::same_as< std::ranges::range_value_t<R>, V >;
-
 template<typename V>
 class buffer : public movable
 {
@@ -91,7 +85,7 @@ public:
 };
 
 template<typename R>
-explicit buffer(R&&) -> buffer<std::ranges::range_value_t<R>>;
+explicit buffer(R&&) -> buffer<range_value_t<R>>;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
@@ -109,7 +103,7 @@ public:
 };
 
 template<typename R>
-explicit vertex_buffer(R&&) -> vertex_buffer<std::ranges::range_value_t<R>>;
+explicit vertex_buffer(R&&) -> vertex_buffer<range_value_t<R>>;
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
@@ -126,7 +120,7 @@ public:
 };
 
 template<typename R>
-explicit element_buffer(R&&) -> element_buffer<std::ranges::range_value_t<R>>;
+explicit element_buffer(R&&) -> element_buffer<range_value_t<R>>;
 
 ////////////////////////////////////////////////////////////////////////////////
 class vertex_array : public movable
