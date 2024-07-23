@@ -9,7 +9,6 @@
 #define OGL_VERTEX_HPP
 
 #include <ogl/ranges.hpp>
-#include <ogl/traits.hpp>
 #include <ogl/types.hpp>
 
 #include <cstddef>

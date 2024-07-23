@@ -3,7 +3,6 @@
 #include <ogl/error.hpp>
 #include <ogl/ranges.hpp>
 #include <ogl/shader.hpp>
-#include <ogl/traits.hpp>
 #include <ogl/types.hpp>
 #include <ogl/uniform.hpp>
 #include <ogl/vec.hpp>
