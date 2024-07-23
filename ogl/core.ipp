@@ -17,14 +17,6 @@ namespace ogl
 {
 
 ////////////////////////////////////////////////////////////////////////////////
-namespace internal
-{
-
-void draw_ebo_trias(unsigned count, type, std::size_t off);
-
-}
-
-////////////////////////////////////////////////////////////////////////////////
 template<typename V>
 void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer<V>& ebo, std::size_t from, std::size_t count)
 {
@@ -32,7 +24,7 @@ void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer<V>& ebo, 
     attr.enable();
     ebo.bind();
 
-    internal::draw_ebo_trias(count, ebo.opengl_type, from * ebo.value_size);
+    draw_elem_trias(ebo.opengl_type, count, from * ebo.value_size);
 
     ebo.unbind();
     attr.disable();

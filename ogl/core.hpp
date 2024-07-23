@@ -9,6 +9,8 @@
 #define OGL_CORE_HPP
 
 #include <ogl/color.hpp>
+#include <ogl/types.hpp>
+
 #include <cstddef>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +31,7 @@ template<typename> class element_buffer;
 class vertex_array;
 
 void draw_trias(std::size_t from, std::size_t count);
+void draw_elem_trias(type, std::size_t count, std::size_t off = 0);
 
 void draw_trias(shader_program&, vertex_attr&, std::size_t from, std::size_t count);
 
