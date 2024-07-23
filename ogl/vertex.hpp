@@ -28,8 +28,6 @@ class vertex_attr : public movable
     template<typename> friend class vertex_buffer;
 
 public:
-    ~vertex_attr();
-
     vertex_attr(vertex_attr&&);
     vertex_attr& operator=(vertex_attr&&);
 

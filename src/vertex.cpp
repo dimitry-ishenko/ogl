@@ -23,8 +23,6 @@ vertex_attr::vertex_attr(unsigned index, std::size_t size, std::size_t count, ty
     if (auto ev = glGetError()) throw opengl_error(ev);
 }
 
-vertex_attr::~vertex_attr() { if (index_ != no_index) disable(); }
-
 vertex_attr::vertex_attr(vertex_attr&& rhs) : index_{rhs.index_}, size_{rhs.size_}
 {
     rhs.index_ = no_index;
@@ -42,8 +40,8 @@ vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
     return (*this);
 }
 
-void vertex_attr::enable() { glEnableVertexAttribArray(index_); }
-void vertex_attr::disable() { glDisableVertexAttribArray(index_); }
+void vertex_attr::enable()  { if (index_ != no_index) glEnableVertexAttribArray(index_); }
+void vertex_attr::disable() { if (index_ != no_index) glDisableVertexAttribArray(index_); }
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace internal
