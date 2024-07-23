@@ -64,8 +64,8 @@ void main()
 
         ogl::clear(ogl::color4{.2, .3, .3, 1});
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        //ogl::draw_trias(pgm, attr);
-        ogl::draw_trias(pgm, attr2, ebo);
+        //ogl::draw_trias(pgm, attr, 0, attr.size());
+        ogl::draw_trias(pgm, attr2, ebo, 0, ebo.size());
 
         win.swap_buffers();
         ogl::poll_events();

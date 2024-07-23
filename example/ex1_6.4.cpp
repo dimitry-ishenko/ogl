@@ -61,7 +61,7 @@ void main()
         float green = std::sin(time.count()) / 2 + .5;
         ucol = vec4{ 0, green, 0, 1 };
 
-        ogl::draw_trias(pgm, attr);
+        ogl::draw_trias(pgm, attr, 0, attr.size());
 
         win.swap_buffers();
         ogl::poll_events();

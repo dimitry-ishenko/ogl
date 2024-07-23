@@ -26,12 +26,6 @@ void draw_ebo_trias(unsigned count, unsigned type, std::size_t off);
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V>
-void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer<V>& ebo, std::size_t from)
-{
-    draw_trias(pgm, attr, ebo, from, ebo.size() - from);
-}
-
-template<typename V>
 void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer<V>& ebo, std::size_t from, std::size_t count)
 {
     pgm.use();

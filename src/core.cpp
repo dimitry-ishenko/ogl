@@ -33,11 +33,6 @@ void clear(const color4& c)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from)
-{
-    draw_trias(pgm, attr, from, attr.size() - from);
-}
-
 void draw_trias(shader_program& pgm, vertex_attr& attr, std::size_t from, std::size_t count)
 {
     pgm.use();
