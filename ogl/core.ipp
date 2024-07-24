@@ -22,8 +22,8 @@ template<typename V>
 void draw_trias(shader_program& pgm, vertex_attr& attr, element_buffer<V>& ebo, std::size_t from, std::size_t count)
 {
     pgm.use();
-    enable_guard enable{attr};
-    bind_guard bind{ebo};
+    auto_enable e{attr};
+    auto_bind b{ebo};
 
     draw_elem_trias(ebo.opengl_type, count, from * ebo.value_size);
 }

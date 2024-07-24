@@ -37,24 +37,24 @@ inline constexpr packed_t packed{ };
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename C>
-class bind_guard
+class auto_bind
 {
     C& obj_;
 
 public:
-    bind_guard(C& obj) : obj_{obj} { obj_.bind(); }
-    ~bind_guard() { obj_.unbind(); }
+    auto_bind(C& obj) : obj_{obj} { obj_.bind(); }
+    ~auto_bind() { obj_.unbind(); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename C>
-class enable_guard
+class auto_enable
 {
     C& obj_;
 
 public:
-    enable_guard(C& obj) : obj_{obj} { obj_.enable(); }
-    ~enable_guard() { obj_.disable(); }
+    auto_enable(C& obj) : obj_{obj} { obj_.enable(); }
+    ~auto_enable() { obj_.disable(); }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

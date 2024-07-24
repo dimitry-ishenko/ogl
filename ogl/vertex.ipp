@@ -75,7 +75,7 @@ template<contiguous_sized_range_of<V> R>
 void buffer<V>::data(R&& payload)
 {
     size_ = std::size(payload);
-    bind_guard bind{*this};
+    auto_bind b{*this};
     internal::buffer_data(target_, std::data(payload), size_ * value_size);
 }
 
@@ -123,7 +123,7 @@ vertex_attr vertex_buffer<V>::define_attr(unsigned index, std::size_t elem_from,
     auto bytes = this->size() * this->value_size - off;
     auto attr_size = bytes / stride + ((bytes % stride) ? 1 : 0);
 
-    bind_guard bind{*this};
+    auto_bind b{*this};
     return vertex_attr{ index, attr_size, elem_count, this->opengl_type, norm, stride, off };
 }
 
@@ -139,7 +139,7 @@ element_buffer<V>::element_buffer(R&& payload) : buffer<V>{ internal::element_ta
 template<typename V, typename... Args>
 void vertex_array::enable_attr_(unsigned index, vertex_buffer<V>& vbo, Args&&... args)
 {
-    bind_guard bind{*this};
+    auto_bind b{*this};
     vbo.define_attr(index, std::forward<Args>(args)...).enable();
 }
 
@@ -176,7 +176,7 @@ void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_
 template<typename V>
 void vertex_array::set_elements(element_buffer<V>& ebo)
 {
-    bind_guard bind{*this};
+    auto_bind b{*this};
     ebo.bind();
     ebo_ = { true, ebo.opengl_type, ebo.value_size };
 }
