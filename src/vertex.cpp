@@ -40,8 +40,8 @@ vertex_attr& vertex_attr::operator=(vertex_attr&& rhs)
     return (*this);
 }
 
-void vertex_attr::enable()  { if (index_ != no_index) glEnableVertexAttribArray(index_); }
-void vertex_attr::disable() { if (index_ != no_index) glDisableVertexAttribArray(index_); }
+void vertex_attr::enable() { glEnableVertexAttribArray(index_); }
+void vertex_attr::disable() { glDisableVertexAttribArray(index_); }
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace internal
