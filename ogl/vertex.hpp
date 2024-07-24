@@ -117,7 +117,7 @@ class vertex_array : public movable
     ebo_;
 
     template<typename V, typename... Args>
-    void enable_attr_(unsigned index, vertex_buffer<V>&, Args&&...);
+    std::size_t enable_attr_(unsigned index, vertex_buffer<V>&, Args&&...);
 
 public:
     vertex_array();
@@ -127,15 +127,15 @@ public:
     vertex_array& operator=(vertex_array&&);
 
     template<typename V>
-    void enable_attr(unsigned index, vertex_buffer<V>&, ogl::norm = dont_norm);
+    std::size_t enable_attr(unsigned index, vertex_buffer<V>&, ogl::norm = dont_norm);
     template<typename V>
-    void enable_attr(unsigned index, vertex_buffer<V>&, packed_t, ogl::norm = dont_norm);
+    std::size_t enable_attr(unsigned index, vertex_buffer<V>&, packed_t, ogl::norm = dont_norm);
     template<typename V>
-    void enable_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, ogl::norm = dont_norm);
+    std::size_t enable_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, ogl::norm = dont_norm);
     template<typename V>
-    void enable_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm = dont_norm);
+    std::size_t enable_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm = dont_norm);
     template<typename V>
-    void enable_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm = dont_norm);
+    std::size_t enable_attr(unsigned index, vertex_buffer<V>&, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm = dont_norm);
 
     template<typename V>
     void set_elements(element_buffer<V>&);

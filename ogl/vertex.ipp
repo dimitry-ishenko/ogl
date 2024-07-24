@@ -137,40 +137,42 @@ element_buffer<V>::element_buffer(R&& payload) : buffer<V>{ internal::element_ta
 
 ////////////////////////////////////////////////////////////////////////////////
 template<typename V, typename... Args>
-void vertex_array::enable_attr_(unsigned index, vertex_buffer<V>& vbo, Args&&... args)
+std::size_t vertex_array::enable_attr_(unsigned index, vertex_buffer<V>& vbo, Args&&... args)
 {
     auto_bind b{*this};
-    vbo.define_attr(index, std::forward<Args>(args)...).enable();
+    auto attr = vbo.define_attr(index, std::forward<Args>(args)...);
+    attr.enable();
+    return attr.size();
 }
 
 template<typename V>
-void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, ogl::norm norm)
+std::size_t vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, ogl::norm norm)
 {
-    enable_attr_(index, vbo, norm);
+    return enable_attr_(index, vbo, norm);
 }
 
 template<typename V>
-void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, packed_t, ogl::norm norm)
+std::size_t vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, packed_t, ogl::norm norm)
 {
-    enable_attr_(index, vbo, packed, norm);
+    return enable_attr_(index, vbo, packed, norm);
 }
 
 template<typename V>
-void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, ogl::norm norm)
+std::size_t vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, ogl::norm norm)
 {
-    enable_attr_(index, vbo, elem_from, elem_count, norm);
+    return enable_attr_(index, vbo, elem_from, elem_count, norm);
 }
 
 template<typename V>
-void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm norm)
+std::size_t vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, packed_t, ogl::norm norm)
 {
-    enable_attr_(index, vbo, elem_from, elem_count, packed, norm);
+    return enable_attr_(index, vbo, elem_from, elem_count, packed, norm);
 }
 
 template<typename V>
-void vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm)
+std::size_t vertex_array::enable_attr(unsigned index, vertex_buffer<V>& vbo, std::size_t elem_from, std::size_t elem_count, std::size_t stride, ogl::norm norm)
 {
-    enable_attr_(index, vbo, elem_from, elem_count, stride, norm);
+    return enable_attr_(index, vbo, elem_from, elem_count, stride, norm);
 }
 
 template<typename V>
