@@ -21,11 +21,11 @@ find_package(OpenGL REQUIRED)
 
 set(HEADERS
     ogl/color.hpp
+    ogl/concepts.hpp
     ogl/core.hpp
     ogl/core.ipp
     ogl/error.hpp
     ogl/extern.hpp
-    ogl/ranges.hpp
     ogl/shader.hpp
     ogl/types.hpp
     ogl/uniform.hpp

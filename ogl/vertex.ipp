@@ -8,7 +8,7 @@
 #ifndef OGL_VERTEX_IPP
 #define OGL_VERTEX_IPP
 
-#include <ogl/ranges.hpp>
+#include <ogl/concepts.hpp>
 #include <ogl/types.hpp>
 #include <ogl/vertex.hpp>
 

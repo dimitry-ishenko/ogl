@@ -8,7 +8,7 @@
 #ifndef OGL_VERTEX_HPP
 #define OGL_VERTEX_HPP
 
-#include <ogl/ranges.hpp>
+#include <ogl/concepts.hpp>
 #include <ogl/types.hpp>
 
 #include <cstddef>
