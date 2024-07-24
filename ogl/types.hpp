@@ -12,6 +12,7 @@
 #include <ogl/vec.hpp>
 
 #include <cstdint>
+#include <concepts>
 #include <type_traits>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -226,7 +227,7 @@ consteval auto get_uniform()
          if constexpr (std::is_same_v<T, std::int32_t> ) return &glGetUniformiv;
     else if constexpr (std::is_same_v<T, std::uint32_t>) return &glGetUniformuiv;
     else if constexpr (std::is_same_v<T, float>        ) return &glGetUniformfv;
-    else static_assert(false, "Unsupported uniform type");
+    else return nullptr;
 }
 
 template<typename T, std::size_t N>
@@ -237,30 +238,30 @@ consteval auto set_uniform()
              if constexpr (std::is_same_v<T, std::int32_t> ) return &glUniform1iv;
         else if constexpr (std::is_same_v<T, std::uint32_t>) return &glUniform1uiv;
         else if constexpr (std::is_same_v<T, float>        ) return &glUniform1fv;
-        else static_assert(false, "Unsupported uniform type");
+        else return nullptr;
     }
     else if constexpr (N == 2)
     {
              if constexpr (std::is_same_v<T, std::int32_t> ) return &glUniform2iv;
         else if constexpr (std::is_same_v<T, std::uint32_t>) return &glUniform2uiv;
         else if constexpr (std::is_same_v<T, float>        ) return &glUniform2fv;
-        else static_assert(false, "Unsupported uniform type");
+        else return nullptr;
     }
     else if constexpr (N == 3)
     {
              if constexpr (std::is_same_v<T, std::int32_t> ) return &glUniform3iv;
         else if constexpr (std::is_same_v<T, std::uint32_t>) return &glUniform3uiv;
         else if constexpr (std::is_same_v<T, float>        ) return &glUniform3fv;
-        else static_assert(false, "Unsupported uniform type");
+        else return nullptr;
     }
     else if constexpr (N == 4)
     {
              if constexpr (std::is_same_v<T, std::int32_t> ) return &glUniform4iv;
         else if constexpr (std::is_same_v<T, std::uint32_t>) return &glUniform4uiv;
         else if constexpr (std::is_same_v<T, float>        ) return &glUniform4fv;
-        else static_assert(false, "Unsupported uniform type");
+        else return nullptr;
     }
-    else static_assert(false, "Unsupported uniform type");
+    else return nullptr;
 }
 
 }
@@ -270,22 +271,6 @@ template<typename T>
 struct type_traits
 {
     using value_type = std::remove_cv_t<T>;
-    using elem_type  = value_type;
-
-    static constexpr auto value_size = sizeof(value_type);
-    static constexpr auto elem_size  = sizeof(elem_type);
-    static constexpr auto elem_count = 1;
-
-    static constexpr auto opengl_type = internal::opengl_type<value_type>();
-    static constexpr auto get_uniform = internal::get_uniform<elem_type, elem_count>();
-    static constexpr auto set_uniform = internal::set_uniform<elem_type, elem_count>();
-};
-
-////////////////////////////////////////////////////////////////////////////////
-template<vector T>
-struct type_traits<T>
-{
-    using value_type = std::remove_cv_t<T>;
     using elem_type  = typename value_type::value_type;
 
     static constexpr auto value_size = sizeof(value_type);
@@ -293,6 +278,24 @@ struct type_traits<T>
     static constexpr auto elem_count = value_type::size();
 
     static constexpr auto opengl_type = type_traits<elem_type>::opengl_type;
+    static constexpr auto get_uniform = internal::get_uniform<elem_type, elem_count>();
+    static constexpr auto set_uniform = internal::set_uniform<elem_type, elem_count>();
+};
+
+template<typename T>
+concept fundamental = std::integral<T> || std::floating_point<T>;
+
+template<fundamental T>
+struct type_traits<T>
+{
+    using value_type = std::remove_cv_t<T>;
+    using elem_type  = value_type;
+
+    static constexpr auto value_size = sizeof(value_type);
+    static constexpr auto elem_size  = sizeof(elem_type);
+    static constexpr auto elem_count = 1;
+
+    static constexpr auto opengl_type = internal::opengl_type<value_type>();
     static constexpr auto get_uniform = internal::get_uniform<elem_type, elem_count>();
     static constexpr auto set_uniform = internal::set_uniform<elem_type, elem_count>();
 };
