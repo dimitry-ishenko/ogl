@@ -72,17 +72,9 @@ buffer<V>& buffer<V>::operator=(buffer<V>&& rhs)
 
 template<typename V>
 template<contiguous_sized_range_of<V> R>
-void buffer<V>::data(R&& payload) { user_data(std::forward<R>(payload)); }
-
-template<typename V>
-template<contiguous_sized_range R>
-void buffer<V>::user_data(R&& payload)
+void buffer<V>::data(R&& payload)
 {
-    constexpr auto payload_value_size = sizeof(range_value_t<R>);
-    constexpr auto ratio = payload_value_size / value_size;
-    static_assert(payload_value_size % value_size == 0, "Incompatible payload type");
-
-    size_ = ratio * std::size(payload);
+    size_ = std::size(payload);
     bind_guard bind{*this};
     internal::buffer_data(target_, std::data(payload), size_ * value_size);
 }

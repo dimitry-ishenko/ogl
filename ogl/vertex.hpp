@@ -64,7 +64,6 @@ public:
     buffer& operator=(buffer&&);
 
     template<contiguous_sized_range_of<V> R> void data(R&& payload);
-    template<contiguous_sized_range R> void user_data(R&& payload);
 
     auto size() const { return size_; }
 
